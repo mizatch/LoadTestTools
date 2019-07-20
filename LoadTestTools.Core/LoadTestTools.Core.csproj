@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>Mitchell Lake</Authors>
+    <Company>Gillion Group LLC</Company>
+    <Copyright>Gillion Group LLC</Copyright>
+    <PackageProjectUrl>https://github.com/mizatch/LoadTestTools</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mizatch/LoadTestTools</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/mizatch/LoadTestTools/blob/master/LICENSE</PackageLicenseUrl>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RestSharp" Version="106.6.10" />
+  </ItemGroup>
+
+</Project>
