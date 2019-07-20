@@ -97,9 +97,8 @@ namespace LoadTestTools.SpecFlowSample.MsTest
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 4
- testRunner.When("I drill \'https://www.google.com/complete/search?q=des%20moines&cp=10&client=psy-a" +
-                    "b&xssi=t&gs_ri=gws-wiz&hl=en&authuser=0&psi=_2YyXZ70JJrWtQa7gxo.1563584256429\' w" +
-                    "ith \'2\' concurrent connections for \'2000\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I drill \'https://{Enter your URL here}\' with \'2\' concurrent connections for \'2000" +
+                    "\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 5
  testRunner.Then("the average response time is less than \'500\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 6

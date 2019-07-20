@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- See: https://github.com/techtalk/SpecFlow/issues/1516#issuecomment-488244190 -->
+    <_SpecFlow_msTestRuntimePlugin>netstandard2.0</_SpecFlow_msTestRuntimePlugin>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>Mitchell Lake</Authors>
+    <Company>Gillion Group LLC</Company>
+    <Description>Shared step definition file to load test API's.</Description>
+    <Copyright>2019 Gillion Group LLC</Copyright>
+    <PackageLicenseUrl>https://github.com/mizatch/LoadTestTools/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/mizatch/LoadTestTools</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mizatch/LoadTestTools</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LoadTestTools.Core" Version="1.0.1" />
+    <PackageReference Include="SpecFlow.MsTest" Version="3.0.225" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="DrillSteps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>
