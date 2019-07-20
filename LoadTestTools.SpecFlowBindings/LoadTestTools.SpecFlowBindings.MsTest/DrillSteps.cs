@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LoadTestTools.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TechTalk.SpecFlow;
-using NUnit.Framework;
 
-namespace LoadTestTools.SpecFlowBindings
+namespace LoadTestTools.SpecFlowBindings.MsTest
 {
     [Binding]
     public sealed class DrillSteps
@@ -52,7 +52,7 @@ namespace LoadTestTools.SpecFlowBindings
         {
             var drillStats = _scenarioContext.Get<DrillStats>();
 
-            Assert.Less(drillStats.AverageResponseTime, averageResponseTime,
+            Assert.IsTrue(drillStats.AverageResponseTime < averageResponseTime,
                 $"Average Response Time did not achieve expectation of {averageResponseTime} milliseconds.  Actual Average Respose Time was {drillStats.AverageResponseTime}");
 
             Console.WriteLine($"Actual Average Response Time: {averageResponseTime}");
@@ -63,7 +63,7 @@ namespace LoadTestTools.SpecFlowBindings
         {
             var drillStats = _scenarioContext.Get<DrillStats>();
 
-            Assert.Less(drillStats.FailureCount, failedResponseCount,
+            Assert.IsTrue(drillStats.FailureCount < failedResponseCount,
                 $"Failed Response Count did not achieve expectation of {failedResponseCount}.  Actual Failed Response Count was {drillStats.FailureCount}");
 
             Console.WriteLine($"Actual Failed Response Count: {drillStats.FailureCount}");
