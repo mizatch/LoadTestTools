@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace LoadTestTools.SpecFlowSample
+namespace LoadTestTools.SpecFlowSample.MsTest
 {
     using TechTalk.SpecFlow;
     
@@ -61,7 +61,7 @@ namespace LoadTestTools.SpecFlowSample
             if (((testRunner.FeatureContext != null) 
                         && (testRunner.FeatureContext.FeatureInfo.Title != "DrillUrlTests")))
             {
-                global::LoadTestTools.SpecFlowSample.DrillUrlTestsFeature.FeatureSetup(null);
+                global::LoadTestTools.SpecFlowSample.MsTest.DrillUrlTestsFeature.FeatureSetup(null);
             }
         }
         

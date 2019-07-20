@@ -2,18 +2,18 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("LoadTestTools.SpecFlowSample")]
+[assembly: AssemblyTitle("LoadTestTools.SpecFlowSample.MsTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LoadTestTools.SpecFlowSample")]
+[assembly: AssemblyProduct("LoadTestTools.SpecFlowSample.MsTest")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
 
-[assembly: Guid("0694c8d0-e1ab-4b11-99a4-2322f5a9392e")]
+[assembly: Guid("e9915afb-6f5f-455c-a3e8-f6012027809e")]
 
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
