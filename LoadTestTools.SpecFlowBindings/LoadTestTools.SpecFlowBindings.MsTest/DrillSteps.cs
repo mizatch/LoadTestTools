@@ -55,7 +55,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             Assert.IsTrue(drillStats.AverageResponseTime < averageResponseTime,
                 $"Average Response Time did not achieve expectation of {averageResponseTime} milliseconds.  Actual Average Respose Time was {drillStats.AverageResponseTime}");
 
-            Console.WriteLine($"Actual Average Response Time: {averageResponseTime}");
+            Console.WriteLine($"Actual Average Response Time: {drillStats.AverageResponseTime}");
         }
 
         [Then(@"there are fewer than '(.*)' failed responses")]
