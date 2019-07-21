@@ -44,3 +44,18 @@ Scenario: Drill URL
 	
 	And there are fewer than '5' failed responses
 ```
+
+# Make some GET requests a URL and a collection of query string parameters
+
+```
+Scenario: Drill URL with parameters
+	When I drill 'https://{Enter your URL here}' with '2' concurrent connections for '2000' milliseconds, with query parameters
+	| Key   | Value         |
+	| text  | example_text  |
+	| text2 | example_text2 |
+	| etc   | etc           |
+
+	Then the average response time is less than '500' milliseconds
+	
+	And there are fewer than '5' failed responses
+```
