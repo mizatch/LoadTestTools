@@ -4,6 +4,13 @@ This solution was created with the goal making it easy to create and manage API 
 
 **_These libraries should only be used for good.  Do not load test any API without owner approval._**
 
+# How do you load test?
+
+This package aims to use two common tools for testing an API: a Hammer and a Drill.  In both cases, we primarily measure average response time and request failure count.
+
+* When you use the _Drill_, you will be creating a sustained load against an API with a simulated number of concurrent users (connections) and for a specific period of time.  What we are trying to validate with the Drill is that the API can withstand a certain amount of requests and still perform as expected.
+* When you use the _Hammer_, you will be gradually increasing the load against an API to determine the point at which the API begins to perform below standards.  _The Hammer is still in development and not yet supported._
+
 # Instructions
 
 * Create a Unit Test Project (.Net Framework).
@@ -45,7 +52,7 @@ Scenario: Drill URL
 	And there are fewer than '5' failed responses
 ```
 
-# Make some GET requests a URL and a collection of query string parameters
+# Make some GET requests with a URL and a collection of query string parameters
 
 ```
 Scenario: Drill URL with parameters
