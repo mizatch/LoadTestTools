@@ -48,10 +48,10 @@
       <HintPath>..\packages\Gherkin.6.0.0\lib\net45\Gherkin.dll</HintPath>
     </Reference>
     <Reference Include="LoadTestTools.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LoadTestTools.Core.1.0.1\lib\netstandard2.0\LoadTestTools.Core.dll</HintPath>
+      <HintPath>..\packages\LoadTestTools.Core.1.0.2\lib\netstandard2.0\LoadTestTools.Core.dll</HintPath>
     </Reference>
-    <Reference Include="LoadTestTools.SpecFlowBindings.MsTest, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LoadTestTools.SpecFlowBindings.MsTest.1.0.0\lib\netstandard2.0\LoadTestTools.SpecFlowBindings.MsTest.dll</HintPath>
+    <Reference Include="LoadTestTools.SpecFlowBindings.MsTest, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LoadTestTools.SpecFlowBindings.MsTest.1.0.1\lib\netstandard2.0\LoadTestTools.SpecFlowBindings.MsTest.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
