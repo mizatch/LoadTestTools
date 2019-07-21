@@ -25,7 +25,7 @@ This package aims to use two common tools for testing an API: a Hammer and a Dri
 
 # specflow.json:
 
-```json
+```
 {
     "bindingCulture": {
         "language": "en-us"
