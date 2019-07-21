@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using LoadTestTools.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,30 +20,24 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds")]
         public async Task WhenIDrillWithConcurrentConnectionsForMilliseconds(string url, int connectionCount, int drillTime)
         {
-            var tasks = new List<Task<List<DrillResult>>>();
+            var drillStats = await Drill.DrillUrl(url, connectionCount, drillTime);
 
-            for (var i = 0; i < connectionCount; i++)
+            _scenarioContext.Set(drillStats);
+        }
+
+        [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds, with query parameters")]
+        public async Task WhenIDrillWithConcurrentConnectionsForMillisecondsWithQueryParameters(string url, int connectionCount, int drillTime, Table table)
+        {
+            var parameterDictionary = new Dictionary<string, string>();
+
+            foreach (var tableRow in table.Rows)
             {
-                var drillUtlTask = Task.Factory.StartNew(() => Drill.DrillUrl(url, drillTime));
-
-                tasks.Add(drillUtlTask);
+                parameterDictionary.Add(tableRow["Key"], tableRow["Value"]);
             }
 
-            var taskResults = await Task.WhenAll(tasks);
+            var drillStats = await Drill.DrillUrl(url, connectionCount, drillTime, parameterDictionary);
 
-            var sessionResults = taskResults.ToList();
-
-            var aggregatedResults = sessionResults.SelectMany(s => s).ToList();
-
-            _scenarioContext.Set(new DrillStats
-            {
-                AverageResponseTime = aggregatedResults.Average(a => a.ResponseMilliseconds),
-                ConnectionCount = connectionCount,
-                TotalRequestCount = aggregatedResults.Count,
-                FailureCount = aggregatedResults.Count(c => !c.IsSuccessful)
-            });
-
-            Console.WriteLine($"Total Request Count: {aggregatedResults.Count}");
+            _scenarioContext.Set(drillStats);
         }
 
         [Then(@"the average response time is less than '(.*)' milliseconds")]

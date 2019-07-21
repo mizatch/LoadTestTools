@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LoadTestTools.Core" Version="1.0.1" />
+    <PackageReference Include="LoadTestTools.Core" Version="1.0.2" />
     <PackageReference Include="SpecFlow.MsTest" Version="3.0.225" />
   </ItemGroup>
 
