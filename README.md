@@ -13,7 +13,7 @@ This solution was created with the goal making it easy to create and manage API 
 * Add a SpecFlow feature file to your project.
 * Open the Properties of the feature file and remove "SpecFlowSingleFileGenerator" from the "Custom Tool" property.  This property should be left blank.
 * Use your Gherkin skills to start writing tests using the step bindings supplied to you by this package.  See below for a couple of Gherkin usage examples.
-* If the step bindings aren't immediately recognized, restarting Visual Studio should do the truck.
+* If the step bindings aren't immediately recognized, restarting Visual Studio should do the trick.
 
 
 # specflow.json:
