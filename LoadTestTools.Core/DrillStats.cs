@@ -1,4 +1,6 @@
-﻿namespace LoadTestTools.Core
+﻿using System.Collections.Generic;
+
+namespace LoadTestTools.Core
 {
     public class DrillStats
     {
@@ -6,5 +8,6 @@
         public int TotalRequestCount { get; set; }
         public int ConnectionCount { get; set; }
         public int FailureCount { get; set; }
+        public List<RequestResult> RequestResults { get; set; }
     }
 }
