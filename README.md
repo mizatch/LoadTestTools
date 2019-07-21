@@ -41,7 +41,7 @@ This package aims to use two common tools for testing an API: a Hammer and a Dri
 ```
 
 
-# Make some GET requests with only a URL
+# Drill an API with GET requests with only a URL
 
 ```
 Scenario: Drill URL
@@ -52,7 +52,7 @@ Scenario: Drill URL
 	And there are fewer than '5' failed responses
 ```
 
-# Make some GET requests with a URL and a collection of query string parameters
+# Drill an API with GET requests with a URL and a collection of query string parameters
 
 ```
 Scenario: Drill URL with parameters
