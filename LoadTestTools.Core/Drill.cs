@@ -6,30 +6,35 @@ using System.Threading.Tasks;
 using RestSharp;
 
 namespace LoadTestTools.Core
-{
+{ 
     public class Drill
     {
-        public static async Task<DrillStats> DrillUrl(
-            string url, 
-            int connectionCount, 
-            int drillTime,
-            Dictionary<string, string> queryStringParameters)
+        public static async Task<DrillStats> DrillUrl(string url, int connectionCount, int drillTime,Dictionary<string, string> queryStringParameters)
         {
-            return await ExecuteConnections(url, connectionCount, drillTime, queryStringParameters);
+            return await ExecuteConnections(url, connectionCount, drillTime, queryStringParameters, 
+                new Dictionary<string, string>());
         }
         
         public static async Task<DrillStats> DrillUrl(string url, int connectionCount, int drillTime)
         {
-            return await ExecuteConnections(url, connectionCount, drillTime, new Dictionary<string, string>());
+            return await ExecuteConnections(url, connectionCount, drillTime, 
+                new Dictionary<string, string>(), new Dictionary<string, string>());
         }
 
-        private static async Task<DrillStats> ExecuteConnections(string url, int connectionCount, int drillTime, Dictionary<string, string> queryStringParameters)
+        public static async Task<DrillStats> DrillUrl(DrillOptions drillOptions)
+        {
+            return await ExecuteConnections(drillOptions.Url, drillOptions.ConnectionCount,
+                drillOptions.MillisecondsToDrill, drillOptions.QueryStringParameters, drillOptions.RequestHeaders);
+        }
+
+        private static async Task<DrillStats> ExecuteConnections(string url, int connectionCount, int drillTime, 
+            Dictionary<string, string> queryStringParameters, Dictionary<string, string> requestHeaders)
         {
             var tasks = new List<Task<List<RequestResult>>>();
 
             for (var i = 0; i < connectionCount; i++)
             {
-                var drillUtlTask = Task.Factory.StartNew(() => ExecuteConnection(url, drillTime, queryStringParameters));
+                var drillUtlTask = Task.Factory.StartNew(() => ExecuteConnection(url, drillTime, queryStringParameters, requestHeaders));
 
                 tasks.Add(drillUtlTask);
             }
@@ -50,7 +55,8 @@ namespace LoadTestTools.Core
             };
         }
         
-        private static List<RequestResult> ExecuteConnection(string url, int drillTime, Dictionary<string, string> queryStringParameters)
+        private static List<RequestResult> ExecuteConnection(string url, int drillTime, 
+            Dictionary<string, string> queryStringParameters, Dictionary<string, string> requestHeaders)
         {
             var restClient = new RestClient(url);
 
@@ -63,9 +69,20 @@ namespace LoadTestTools.Core
             {
                 var request = new RestRequest(Method.GET);
 
-                foreach (var queryStringParameter in queryStringParameters)
+                if (queryStringParameters != null && queryStringParameters.Any())
                 {
-                    request.AddQueryParameter(queryStringParameter.Key, queryStringParameter.Value);
+                    foreach (var queryStringParameter in queryStringParameters)
+                    {
+                        request.AddQueryParameter(queryStringParameter.Key, queryStringParameter.Value);
+                    }
+                }
+
+                if (requestHeaders != null && requestHeaders.Any())
+                {
+                    foreach (var requestHeader in requestHeaders)
+                    {
+                        request.AddHeader(requestHeader.Key, requestHeader.Value);
+                    }
                 }
 
                 var requestStopwatch = Stopwatch.StartNew();
