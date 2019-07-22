@@ -16,3 +16,15 @@ Scenario: Drill URL with parameters
 	Then the average response time is less than '500' milliseconds
 	
 	And there are fewer than '5' failed responses
+
+
+Scenario: Drill URL with requeset headers
+	Given the request headers
+		| Key           | Value               |
+		| Authorization | Bearer blahblahblah |
+	
+	When I drill 'https://{Enter your URL here}' with '2' concurrent connections for '2000' milliseconds
+	
+	Then the average response time is less than '500' milliseconds
+	
+	And there are fewer than '5' failed responses

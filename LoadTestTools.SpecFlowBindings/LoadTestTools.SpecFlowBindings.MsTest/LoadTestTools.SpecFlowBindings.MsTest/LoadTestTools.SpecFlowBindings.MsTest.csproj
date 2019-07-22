@@ -16,7 +16,7 @@
     <PackageLicenseUrl>https://github.com/mizatch/LoadTestTools/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/mizatch/LoadTestTools</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mizatch/LoadTestTools</RepositoryUrl>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <PackageTags>Load Test API SpecFlow Bindings</PackageTags>
   </PropertyGroup>
 
