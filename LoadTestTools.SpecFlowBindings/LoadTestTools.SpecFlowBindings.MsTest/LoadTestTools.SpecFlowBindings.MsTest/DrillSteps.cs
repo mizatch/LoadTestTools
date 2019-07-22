@@ -17,25 +17,55 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             _scenarioContext = scenarioContext;
         }
 
-        [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds")]
-        public async Task WhenIDrillWithConcurrentConnectionsForMilliseconds(string url, int connectionCount, int drillTime)
+        [Given(@"the request headers")]
+        public void GivenTheRequestHeaders(Table table)
         {
-            var drillStats = await Drill.DrillUrl(url, connectionCount, drillTime);
+            var requestHeaderDictionary = new Dictionary<string, string>();
+
+            foreach (var tableRow in table.Rows)
+            {
+                requestHeaderDictionary.Add(tableRow["Key"], tableRow["Value"]);
+            }
+
+            _scenarioContext.Add("RequestHeaders", requestHeaderDictionary);
+        }
+
+        [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds")]
+        public async Task WhenIDrillWithConcurrentConnectionsForMilliseconds(string url, int connectionCount, int millisecondsToDrill)
+        {
+            var drillOptions = new DrillOptions
+            {
+                Url = url,
+                ConnectionCount = connectionCount,
+                MillisecondsToDrill = millisecondsToDrill,
+                RequestHeaders = AddRequestHeaders()
+            };
+
+            var drillStats = await Drill.DrillUrl(drillOptions);
 
             _scenarioContext.Set(drillStats);
         }
 
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds, with query parameters")]
-        public async Task WhenIDrillWithConcurrentConnectionsForMillisecondsWithQueryParameters(string url, int connectionCount, int drillTime, Table table)
+        public async Task WhenIDrillWithConcurrentConnectionsForMillisecondsWithQueryParameters(string url, int connectionCount, int millisecondsToDrill, Table table)
         {
-            var parameterDictionary = new Dictionary<string, string>();
+            var queryStringParameters = new Dictionary<string, string>();
 
             foreach (var tableRow in table.Rows)
             {
-                parameterDictionary.Add(tableRow["Key"], tableRow["Value"]);
+                queryStringParameters.Add(tableRow["Key"], tableRow["Value"]);
             }
 
-            var drillStats = await Drill.DrillUrl(url, connectionCount, drillTime, parameterDictionary);
+            var drillOptions = new DrillOptions
+            {
+                Url = url,
+                ConnectionCount = connectionCount,
+                MillisecondsToDrill = millisecondsToDrill,
+                RequestHeaders = AddRequestHeaders(),
+                QueryStringParameters = queryStringParameters
+            };
+
+            var drillStats = await Drill.DrillUrl(drillOptions);
 
             _scenarioContext.Set(drillStats);
         }
@@ -60,6 +90,18 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 $"Failed Response Count did not achieve expectation of {failedResponseCount}.  Actual Failed Response Count was {drillStats.FailureCount}");
 
             Console.WriteLine($"Actual Failed Response Count: {drillStats.FailureCount}");
+        }
+
+        private Dictionary<string, string> AddRequestHeaders()
+        {
+            if (!_scenarioContext.ContainsKey("RequestHeaders"))
+            {
+                return new Dictionary<string, string>();
+            }
+
+            var requestHeaders = _scenarioContext.Get<Dictionary<string, string>>("RequestHeaders");
+
+            return requestHeaders ?? new Dictionary<string, string>();
         }
     }
 }
