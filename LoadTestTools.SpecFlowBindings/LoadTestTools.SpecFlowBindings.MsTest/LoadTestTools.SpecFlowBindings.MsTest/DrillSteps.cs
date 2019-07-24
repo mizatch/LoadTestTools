@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using LoadTestTools.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TechTalk.SpecFlow;
 
 namespace LoadTestTools.SpecFlowBindings.MsTest
@@ -15,19 +13,6 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
         public DrillSteps(ScenarioContext scenarioContext)
         {
             _scenarioContext = scenarioContext;
-        }
-
-        [Given(@"the request headers")]
-        public void GivenTheRequestHeaders(Table table)
-        {
-            var requestHeaderDictionary = new Dictionary<string, string>();
-
-            foreach (var tableRow in table.Rows)
-            {
-                requestHeaderDictionary.Add(tableRow["Key"], tableRow["Value"]);
-            }
-
-            _scenarioContext.Add("RequestHeaders", requestHeaderDictionary);
         }
 
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds")]
@@ -43,7 +28,9 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
 
             var drillStats = await Drill.DrillUrl(drillOptions);
 
-            _scenarioContext.Set(drillStats);
+            _scenarioContext.Set(drillStats, "DrillStats");
+            _scenarioContext.Set(drillStats.AverageResponseTime, "AverageResponseTime");
+            _scenarioContext.Set(drillStats.FailureCount, "FailureCount");
         }
 
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds, with query parameters")]
@@ -67,29 +54,9 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
 
             var drillStats = await Drill.DrillUrl(drillOptions);
 
-            _scenarioContext.Set(drillStats);
-        }
-
-        [Then(@"the average response time is less than '(.*)' milliseconds")]
-        public void ThenTheAverageResponseTimeIsLessThanMilliseconds(int averageResponseTime)
-        {
-            var drillStats = _scenarioContext.Get<DrillStats>();
-
-            Assert.IsTrue(drillStats.AverageResponseTime < averageResponseTime,
-                $"Average Response Time did not achieve expectation of {averageResponseTime} milliseconds.  Actual Average Respose Time was {drillStats.AverageResponseTime}");
-
-            Console.WriteLine($"Actual Average Response Time: {drillStats.AverageResponseTime}");
-        }
-
-        [Then(@"there are fewer than '(.*)' failed responses")]
-        public void ThenThereAreFewerThanFailedResponses(int failedResponseCount)
-        {
-            var drillStats = _scenarioContext.Get<DrillStats>();
-
-            Assert.IsTrue(drillStats.FailureCount < failedResponseCount,
-                $"Failed Response Count did not achieve expectation of {failedResponseCount}.  Actual Failed Response Count was {drillStats.FailureCount}");
-
-            Console.WriteLine($"Actual Failed Response Count: {drillStats.FailureCount}");
+            _scenarioContext.Set(drillStats, "DrillStats");
+            _scenarioContext.Set(drillStats.AverageResponseTime, "AverageResponseTime");
+            _scenarioContext.Set(drillStats.FailureCount, "FailureCount");
         }
 
         private Dictionary<string, string> AddRequestHeaders()

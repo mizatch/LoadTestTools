@@ -21,12 +21,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LoadTestTools.Core" Version="1.0.3" />
+    <PackageReference Include="LoadTestTools.Core" Version="1.0.4" />
     <PackageReference Include="SpecFlow.MsTest" Version="3.0.225" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="CommonSteps.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="DrillSteps.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="HammerSteps.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
