@@ -15,7 +15,7 @@ This package aims to use two common tools for testing an API: a Hammer and a Dri
 
 * Create a Unit Test Project (.Net Framework).
 * Using Nuget, install the package called "LoadTestTools.SpecFlowBindings.MsTest".
-* Add a specflow.json file to your test project and add a stepAssembly reference to "LoadTestTools.SpecFlowBindings.MsTest".  This tells SpecFlow that you want to utilize the SpecFlow step assemblies found in the installed module.  A sample of my specflow.json can be found below.
+* Add a specflow.json file to your test project and add a stepAssembly reference to "LoadTestTools.SpecFlowBindings.MsTest".  This tells SpecFlow that you want to utilize the SpecFlow step bindings found in the installed module.  A sample of my specflow.json can be found below.
 * Open the Properties of the specflow.json file and set the "Copy to Output Directory" property to "Copy always".
 * Add a SpecFlow feature file to your project.
 * Open the Properties of the feature file and remove "SpecFlowSingleFileGenerator" from the "Custom Tool" property.  This property should be left blank.
