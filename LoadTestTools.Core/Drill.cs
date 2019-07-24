@@ -9,7 +9,7 @@ namespace LoadTestTools.Core
 { 
     public class Drill
     {
-        public static async Task<DrillStats> DrillUrl(string url, int connectionCount, int drillTime,Dictionary<string, string> queryStringParameters)
+        public static async Task<DrillStats> DrillUrl(string url, int connectionCount, int drillTime, Dictionary<string, string> queryStringParameters)
         {
             return await ExecuteConnections(url, connectionCount, drillTime, queryStringParameters, 
                 new Dictionary<string, string>());
@@ -85,20 +85,28 @@ namespace LoadTestTools.Core
                     }
                 }
 
-                var requestStopwatch = Stopwatch.StartNew();
-
-                var restResponse = restClient.Execute(request);
-
-                requestStopwatch.Stop();
-
-                drillResults.Add(new RequestResult
-                {
-                    ResponseMilliseconds = requestStopwatch.ElapsedMilliseconds,
-                    IsSuccessful = restResponse.IsSuccessful
-                });
+                drillResults.Add(SendRequest(restClient, request));
             }
 
             return drillResults;
+        }
+
+        private static RequestResult SendRequest(IRestClient restClient, IRestRequest request)
+        {
+            var requestStartDateTime = DateTime.Now;
+
+            var requestStopwatch = Stopwatch.StartNew();
+
+            var restResponse = restClient.Execute(request);
+
+            requestStopwatch.Stop();
+
+            return new RequestResult
+            {
+                ResponseMilliseconds = requestStopwatch.ElapsedMilliseconds,
+                IsSuccessful = restResponse.IsSuccessful,
+                RequestStartDateTime = requestStartDateTime
+            };
         }
     }
 
