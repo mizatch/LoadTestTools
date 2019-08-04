@@ -9,7 +9,7 @@ This solution was created with the goal making it easy to create and manage API 
 This package aims to use two common tools for testing an API: a Hammer and a Drill.  In both cases, we primarily measure average response time and request failure count.
 
 * When you use the _Drill_, you will be creating a sustained load against an API with a simulated number of concurrent users (connections) and for a specific period of time.  What we are trying to validate with the Drill is that the API can withstand a certain amount of requests and still perform as expected.
-* When you use the _Hammer_, you will be gradually increasing the load against an API to determine the point at which the API begins to perform below standards.  _The Hammer is still in development and not yet supported._
+* When you use the _Hammer_, you will be gradually increasing the load against an API to determine the point at which the API begins to perform below standards.
 
 # Instructions
 
@@ -43,8 +43,6 @@ This package aims to use two common tools for testing an API: a Hammer and a Dri
 
 # Drill an API with GET requests with only a URL
 
-## Execute the drill
-
 ```
 Scenario: Drill URL
 	When I drill 'https://{Enter your URL here}' with '2' concurrent connections for '2000' milliseconds
@@ -67,6 +65,33 @@ Scenario: Drill URL with parameters
 	Then the average response time is less than '500' milliseconds
 	
 	And there are fewer than '5' failed responses
+```
+
+# Hammer an API with GET requests with only a URL
+
+```
+Scenario: Hammer URL
+	When I hammer 'https://{{Enter your URL here}}' with up to '20' concurrent requests for a maximum of '30000' millseconds
+	
+	Then the average response time is less than '1000' milliseconds
+	
+	And there are fewer than '5' failed responses
+```
+
+# Hammer an API with GET requests with a URL and a collection of query string parameters
+
+```
+Scenario: Hammer URL with parameters
+	When I hammer 'https://{{Enter your URL here}}' with up to '10' concurrent requests for a maximum of '30000' millseconds, with query parameters
+	| Key   | Value         |
+	| text  | example_text  |
+	| text2 | example_text2 |
+	| etc   | etc           |
+
+	Then the average response time is less than '1000' milliseconds
+	
+	And there are fewer than '5' failed responses
+
 ```
 
 # Add request headers to a Drill or Hammer operation
