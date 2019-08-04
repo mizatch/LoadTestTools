@@ -43,6 +43,8 @@ This package aims to use two common tools for testing an API: a Hammer and a Dri
 
 # Drill an API with GET requests with only a URL
 
+## Execute the drill
+
 ```
 Scenario: Drill URL
 	When I drill 'https://{Enter your URL here}' with '2' concurrent connections for '2000' milliseconds
@@ -67,7 +69,7 @@ Scenario: Drill URL with parameters
 	And there are fewer than '5' failed responses
 ```
 
-# Add request headers to a Drill operation
+# Add request headers to a Drill or Hammer operation
 
 ```
 Scenario: Drill URL with requeset headers
@@ -80,4 +82,52 @@ Scenario: Drill URL with requeset headers
 	Then the average response time is less than '500' milliseconds
 	
 	And there are fewer than '5' failed responses
+```
+
+
+# Getting to the data
+
+Any data which is returned by a Drill/Hammer operation is stored in SpecFlow's ScenarioContext.
+
+
+## Getting Drill results
+
+```
+var actualAverageResponseTime = _scenarioContext.Get<decimal>("AverageResponseTime");
+
+var actualFailureCount = _scenarioContext.Get<int>("FailureCount");
+
+var drillStats = _scenarioContext.Get<DrillStats>("DrillStats");
+```
+
+## Getting Hammer results
+
+```
+var actualAverageResponseTime = _scenarioContext.Get<decimal>("AverageResponseTime");
+
+var actualFailureCount = _scenarioContext.Get<int>("FailureCount");
+	
+var hammerStats = _scenarioContext.Get<HammerStats>("HammerStats");
+
+```
+
+## HammerStats object definition
+
+```
+public class HammerStats
+{
+	public List<HammerSwingResult> HammerSwingStats { get; set; }
+}
+```
+
+## HammerSwingResult definition
+
+```
+public class HammerSwingResult
+{
+	public decimal AverageResponseTime { get; set; }
+	public int TotalRequestCount { get; set; }
+	public int FailureCount { get; set; }
+	public List<RequestResult> RequestResults { get; set; }
+}
 ```
