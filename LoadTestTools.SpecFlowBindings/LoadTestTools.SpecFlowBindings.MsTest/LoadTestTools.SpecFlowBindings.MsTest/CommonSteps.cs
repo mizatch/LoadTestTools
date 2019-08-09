@@ -29,23 +29,23 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
         }
 
         [Then(@"the average response time is less than '(.*)' milliseconds")]
-        public void ThenTheAverageResponseTimeIsLessThanMilliseconds(int averageResponseTime)
+        public void ThenTheAverageResponseTimeIsLessThanMilliseconds(int expectedAverageResponseTime)
         {
             var actualAverageResponseTime = _scenarioContext.Get<decimal>("AverageResponseTime");
 
-            Assert.IsTrue(actualAverageResponseTime < averageResponseTime,
-                $"Average Response Time did not achieve expectation of {averageResponseTime} milliseconds.  Actual Average Respose Time was {actualAverageResponseTime}");
+            Assert.IsTrue(actualAverageResponseTime < expectedAverageResponseTime,
+                $"Average Response Time did not achieve expectation of {expectedAverageResponseTime} milliseconds.  Actual Average Respose Time was {actualAverageResponseTime}");
 
             Console.WriteLine($"Actual Average Response Time: { actualAverageResponseTime}");
         }
 
         [Then(@"there are fewer than '(.*)' failed responses")]
-        public void ThenThereAreFewerThanFailedResponses(int failedResponseCount)
+        public void ThenThereAreFewerThanFailedResponses(int expectedFailedResponseCount)
         {
             var actualFailureCount = _scenarioContext.Get<int>("FailureCount");
 
-            Assert.IsTrue(actualFailureCount > failedResponseCount,
-                $"Failed Response Count did not achieve expectation of {failedResponseCount}.  Actual Failed Response Count was {actualFailureCount}");
+            Assert.IsTrue(actualFailureCount < expectedFailedResponseCount,
+                $"Failed Response Count did not achieve expectation of {expectedFailedResponseCount}.  Actual Failed Response Count was {actualFailureCount}");
 
             Console.WriteLine($"Actual Failed Response Count: {actualFailureCount}");
         }
