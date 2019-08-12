@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using RestSharp;
 using System.Threading.Tasks.Dataflow;
 
@@ -49,6 +50,8 @@ namespace LoadTestTools.Core
 
         private DrillStats ExecuteConnections(DrillOptions drillOptions)
         {
+            ServicePointManager.DefaultConnectionLimit = drillOptions.ConnectionCount;
+
             var aggregatedResults = new List<RequestResult>();
 
             List<RequestResult> RequestFunc(DrillOptions options)
