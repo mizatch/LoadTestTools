@@ -18,14 +18,14 @@ namespace LoadTestTools.SpecFlowSample.MsTest
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
-    public partial class DrillUrlTestsFeature
+    public partial class HammerUrlTestsFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Microsoft.VisualStudio.TestTools.UnitTesting.TestContext _testContext;
         
-#line 1 "DrillUrlTests.feature"
+#line 1 "HammerUrlTests.feature"
 #line hidden
         
         public virtual Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
@@ -44,7 +44,7 @@ namespace LoadTestTools.SpecFlowSample.MsTest
         public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "DrillUrlTests", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "HammerUrlTests", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -59,9 +59,9 @@ namespace LoadTestTools.SpecFlowSample.MsTest
         public virtual void TestInitialize()
         {
             if (((testRunner.FeatureContext != null) 
-                        && (testRunner.FeatureContext.FeatureInfo.Title != "DrillUrlTests")))
+                        && (testRunner.FeatureContext.FeatureInfo.Title != "HammerUrlTests")))
             {
-                global::LoadTestTools.SpecFlowSample.MsTest.DrillUrlTestsFeature.FeatureSetup(null);
+                global::LoadTestTools.SpecFlowSample.MsTest.HammerUrlTestsFeature.FeatureSetup(null);
             }
         }
         
@@ -88,19 +88,19 @@ namespace LoadTestTools.SpecFlowSample.MsTest
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Drill URL")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "DrillUrlTests")]
-        public virtual void DrillURL()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Hammer URL")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "HammerUrlTests")]
+        public virtual void HammerURL()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drill URL", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hammer URL", null, ((string[])(null)));
 #line 3
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 4
- testRunner.When("I drill \'https://{Enter your URL here}\' with \'2\' concurrent connections for \'2000" +
-                    "\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I hammer \'https://{Enter your URL here}\' with up to \'20\' concurrent requests for " +
+                    "a maximum of \'30000\' millseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 6
- testRunner.Then("the average response time is less than \'500\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the average response time is less than \'1000\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 8
  testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
@@ -108,24 +108,24 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Drill URL with parameters")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "DrillUrlTests")]
-        public virtual void DrillURLWithParameters()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Hammer URL with parameters")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "HammerUrlTests")]
+        public virtual void HammerURLWithParameters()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drill URL with parameters", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hammer URL with parameters", null, ((string[])(null)));
 #line 11
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line hidden
-            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                         "Key",
                         "Value"});
-            table1.AddRow(new string[] {
+            table3.AddRow(new string[] {
                         "text",
                         "example_text"});
 #line 12
- testRunner.When("I drill \'https://{Enter your URL here}\' with \'2\' concurrent connections for \'2000" +
-                    "\' milliseconds, with query parameters", ((string)(null)), table1, "When ");
+ testRunner.When("I hammer \'https://{Enter your URL here}\' with up to \'20\' concurrent requests for " +
+                    "a maximum of \'30000\' millseconds, with query parameters", ((string)(null)), table3, "When ");
 #line 16
  testRunner.Then("the average response time is less than \'500\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 18
@@ -135,28 +135,28 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Drill URL with request headers")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "DrillUrlTests")]
-        public virtual void DrillURLWithRequestHeaders()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Hammer URL with request headers")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "HammerUrlTests")]
+        public virtual void HammerURLWithRequestHeaders()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drill URL with request headers", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hammer URL with request headers", null, ((string[])(null)));
 #line 21
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line hidden
-            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                         "Key",
                         "Value"});
-            table2.AddRow(new string[] {
+            table4.AddRow(new string[] {
                         "Authorization",
                         "Bearer blahblahblah"});
 #line 22
- testRunner.Given("the request headers", ((string)(null)), table2, "Given ");
+ testRunner.Given("the request headers", ((string)(null)), table4, "Given ");
 #line 26
- testRunner.When("I drill \'https://{Enter your URL here}\' with \'2\' concurrent connections for \'2000" +
-                    "\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I hammer \'https://{Enter your URL here}\' with up to \'20\' concurrent requests for " +
+                    "a maximum of \'30000\' millseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 28
- testRunner.Then("the average response time is less than \'500\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the average response time is less than \'1000\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 30
  testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden

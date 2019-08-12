@@ -18,7 +18,7 @@ Scenario: Drill URL with parameters
 	And there are fewer than '5' failed responses
 
 
-Scenario: Drill URL with requeset headers
+Scenario: Drill URL with request headers
 	Given the request headers
 		| Key           | Value               |
 		| Authorization | Bearer blahblahblah |
