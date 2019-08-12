@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using RestSharp;
 
@@ -11,6 +12,8 @@ namespace LoadTestTools.Core
     {
         public static async Task<HammerStats> HammerUrl(HammerOptions hammerOptions)
         {
+            ServicePointManager.DefaultConnectionLimit = hammerOptions.MaximumConcurrentRequests;
+
             var concurrentRequestCount = 5;
 
             var restClient = new RestClient(hammerOptions.Url);
