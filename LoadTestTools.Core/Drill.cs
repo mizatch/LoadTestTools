@@ -2,102 +2,131 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using RestSharp;
+using System.Threading.Tasks.Dataflow;
 
 namespace LoadTestTools.Core
 { 
     public class Drill
     {
-        public static async Task<DrillStats> DrillUrl(string url, int connectionCount, int drillTime, Dictionary<string, string> queryStringParameters)
+        private readonly IRestClient _restClient;
+
+        public Drill(IRestClient restClient)
         {
-            return await ExecuteConnections(url, connectionCount, drillTime, queryStringParameters, 
-                new Dictionary<string, string>());
+            _restClient = restClient;
+        }
+
+        public Drill()
+        {
+            _restClient = new RestClient();
+        }
+
+        public DrillStats DrillUrl(string url, int connectionCount, int drillTime, Dictionary<string, string> queryStringParameters)
+        {
+            return ExecuteConnections(new DrillOptions
+            {
+                Url = url,
+                ConnectionCount = connectionCount,
+                MillisecondsToDrill = drillTime,
+                QueryStringParameters = queryStringParameters
+            });
         }
         
-        public static async Task<DrillStats> DrillUrl(string url, int connectionCount, int drillTime)
+        public DrillStats DrillUrl(string url, int connectionCount, int drillTime)
         {
-            return await ExecuteConnections(url, connectionCount, drillTime, 
-                new Dictionary<string, string>(), new Dictionary<string, string>());
-        }
-
-        public static async Task<DrillStats> DrillUrl(DrillOptions drillOptions)
-        {
-            return await ExecuteConnections(drillOptions.Url, drillOptions.ConnectionCount,
-                drillOptions.MillisecondsToDrill, drillOptions.QueryStringParameters, drillOptions.RequestHeaders);
-        }
-
-        private static async Task<DrillStats> ExecuteConnections(string url, int connectionCount, int drillTime, 
-            Dictionary<string, string> queryStringParameters, Dictionary<string, string> requestHeaders)
-        {
-            var tasks = new List<Task<List<RequestResult>>>();
-
-            for (var i = 0; i < connectionCount; i++)
+            return ExecuteConnections(new DrillOptions
             {
-                var drillUtlTask = Task.Factory.StartNew(() => ExecuteConnection(url, drillTime, queryStringParameters, requestHeaders));
+                Url = url,
+                ConnectionCount = connectionCount,
+                MillisecondsToDrill = drillTime
+            });
+        }
 
-                tasks.Add(drillUtlTask);
+        public DrillStats DrillUrl(DrillOptions drillOptions)
+        {
+            return ExecuteConnections(drillOptions);
+        }
+
+        private DrillStats ExecuteConnections(DrillOptions drillOptions)
+        {
+            var aggregatedResults = new List<RequestResult>();
+
+            List<RequestResult> RequestFunc(DrillOptions options)
+            {
+                return ExecuteConnection(options);
             }
 
-            var taskResults = await Task.WhenAll(tasks);
+            var executionDataflowBlockOptions = new ExecutionDataflowBlockOptions
+            {
+                MaxDegreeOfParallelism = drillOptions.ConnectionCount
+            };
 
-            var sessionResults = taskResults.ToList();
+            var transformBlock = new TransformBlock<DrillOptions, List<RequestResult>>((Func<DrillOptions, List<RequestResult>>) RequestFunc, executionDataflowBlockOptions);
 
-            var aggregatedResults = sessionResults.SelectMany(s => s).ToList();
+            for (var i = 0; i < drillOptions.ConnectionCount; i++)
+            {
+                transformBlock.Post(drillOptions);
+            }
+
+            for (var i = 0; i < drillOptions.ConnectionCount; i++)
+            {
+                var requestResults = transformBlock.Receive();
+
+                aggregatedResults.AddRange(requestResults);
+            }
 
             return new DrillStats
             {
                 AverageResponseTime = aggregatedResults.Average(a => a.ResponseMilliseconds),
-                ConnectionCount = connectionCount,
+                ConnectionCount = drillOptions.ConnectionCount,
                 TotalRequestCount = aggregatedResults.Count,
                 FailureCount = aggregatedResults.Count(c => !c.IsSuccessful),
                 RequestResults = aggregatedResults
             };
         }
-        
-        private static List<RequestResult> ExecuteConnection(string url, int drillTime, 
-            Dictionary<string, string> queryStringParameters, Dictionary<string, string> requestHeaders)
+
+        private List<RequestResult> ExecuteConnection(DrillOptions drillOptions)
         {
-            var restClient = new RestClient(url);
+            _restClient.BaseUrl = new Uri(drillOptions.Url);
 
             var drillResults = new List<RequestResult>();
 
             var sessionStopWatch = new Stopwatch();
             sessionStopWatch.Start();
 
-            while (sessionStopWatch.Elapsed < TimeSpan.FromMilliseconds(drillTime))
+            while (sessionStopWatch.Elapsed < TimeSpan.FromMilliseconds(drillOptions.MillisecondsToDrill))
             {
                 var request = new RestRequest(Method.GET);
 
-                if (queryStringParameters != null && queryStringParameters.Any())
+                if (drillOptions.QueryStringParameters != null && drillOptions.QueryStringParameters.Any())
                 {
-                    foreach (var queryStringParameter in queryStringParameters)
+                    foreach (var queryStringParameter in drillOptions.QueryStringParameters)
                     {
                         request.AddQueryParameter(queryStringParameter.Key, queryStringParameter.Value);
                     }
                 }
 
-                if (requestHeaders != null && requestHeaders.Any())
+                if (drillOptions.RequestHeaders != null && drillOptions.RequestHeaders.Any())
                 {
-                    foreach (var requestHeader in requestHeaders)
+                    foreach (var requestHeader in drillOptions.RequestHeaders)
                     {
                         request.AddHeader(requestHeader.Key, requestHeader.Value);
                     }
                 }
 
-                drillResults.Add(SendRequest(restClient, request));
+                drillResults.Add(SendRequest(request));
             }
 
             return drillResults;
         }
 
-        private static RequestResult SendRequest(IRestClient restClient, IRestRequest request)
+        private RequestResult SendRequest(IRestRequest request)
         {
             var requestStartDateTime = DateTime.Now;
 
             var requestStopwatch = Stopwatch.StartNew();
 
-            var restResponse = restClient.Execute(request);
+            var restResponse = _restClient.Execute(request);
 
             requestStopwatch.Stop();
 
@@ -109,5 +138,4 @@ namespace LoadTestTools.Core
             };
         }
     }
-
 }
