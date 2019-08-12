@@ -16,7 +16,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
         }
 
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds")]
-        public async Task WhenIDrillWithConcurrentConnectionsForMilliseconds(string url, int connectionCount, int millisecondsToDrill)
+        public void WhenIDrillWithConcurrentConnectionsForMilliseconds(string url, int connectionCount, int millisecondsToDrill)
         {
             var drillOptions = new DrillOptions
             {
@@ -26,7 +26,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 RequestHeaders = AddRequestHeaders()
             };
 
-            var drillStats = await Drill.DrillUrl(drillOptions);
+            var drill = new Drill();
+            var drillStats = drill.DrillUrl(drillOptions);
 
             _scenarioContext.Set(drillStats, "DrillStats");
             _scenarioContext.Set(drillStats.AverageResponseTime, "AverageResponseTime");
@@ -34,7 +35,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
         }
 
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds, with query parameters")]
-        public async Task WhenIDrillWithConcurrentConnectionsForMillisecondsWithQueryParameters(string url, int connectionCount, int millisecondsToDrill, Table table)
+        public void WhenIDrillWithConcurrentConnectionsForMillisecondsWithQueryParameters(string url, int connectionCount, int millisecondsToDrill, Table table)
         {
             var queryStringParameters = new Dictionary<string, string>();
 
@@ -52,7 +53,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 QueryStringParameters = queryStringParameters
             };
 
-            var drillStats = await Drill.DrillUrl(drillOptions);
+            var drill = new Drill();
+            var drillStats = drill.DrillUrl(drillOptions);
 
             _scenarioContext.Set(drillStats, "DrillStats");
             _scenarioContext.Set(drillStats.AverageResponseTime, "AverageResponseTime");
