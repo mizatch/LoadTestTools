@@ -16,9 +16,10 @@
     <PackageLicenseUrl>https://github.com/mizatch/LoadTestTools/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/mizatch/LoadTestTools</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mizatch/LoadTestTools</RepositoryUrl>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <PackageTags>Load Test API SpecFlow Bindings</PackageTags>
-    <PackageReleaseNotes>- Upgraded core project to version 2.0.1</PackageReleaseNotes>
+    <PackageReleaseNotes>- Upgraded to core version 3.0.0. 
+- Added hook to set a wait time between requests.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
