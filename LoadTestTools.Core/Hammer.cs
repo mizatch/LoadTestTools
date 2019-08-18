@@ -3,78 +3,105 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
+using System.Threading;
+using System.Threading.Tasks.Dataflow;
 using RestSharp;
 
 namespace LoadTestTools.Core
 {
     public class Hammer
     {
-        public static async Task<HammerStats> HammerUrl(HammerOptions hammerOptions)
+        public HammerStats HammerUrl(HammerOptions hammerOptions)
         {
+            return ExecuteConnections(hammerOptions);
+        }
+
+        private HammerStats ExecuteConnections(HammerOptions hammerOptions)
+        {
+            ThreadPool.SetMinThreads(hammerOptions.MaximumConcurrentRequests, hammerOptions.MaximumConcurrentRequests);
+
             ServicePointManager.DefaultConnectionLimit = hammerOptions.MaximumConcurrentRequests;
 
-            var concurrentRequestCount = 5;
+            var concurrentRequestCount = 1;
 
-            var restClient = new RestClient(hammerOptions.Url);
+            var hammerSwingResults = new List<HammerSwingResult>();
 
-            var hammerSwingResult = new List<HammerSwingResult>();
+            RequestResult RequestFunc(HammerOptions options)
+            {
+                return ExecuteConnection(options);
+            }
+
+            var executionDataflowBlockOptions = new ExecutionDataflowBlockOptions
+            {
+                MaxDegreeOfParallelism = hammerOptions.MaximumConcurrentRequests
+            };
+
+            var transformBlock = new TransformBlock<HammerOptions, RequestResult>((Func<HammerOptions, RequestResult>)RequestFunc, executionDataflowBlockOptions);
 
             var maximumRuntimeStopWatch = Stopwatch.StartNew();
 
-            while (concurrentRequestCount <= hammerOptions.MaximumConcurrentRequests && maximumRuntimeStopWatch.ElapsedMilliseconds <= hammerOptions.MaximumMillisecondsToHammer)
+            while (concurrentRequestCount <= hammerOptions.MaximumConcurrentRequests 
+                   && maximumRuntimeStopWatch.ElapsedMilliseconds <= hammerOptions.MaximumMillisecondsToHammer)
             {
-                var requestResultTasks = new List<Task<RequestResult>>();
+                for (var i = 0; i < concurrentRequestCount; i++)
+                {
+                    transformBlock.Post(hammerOptions);
+                }
+
+                var aggregatedResults = new List<RequestResult>();
 
                 for (var i = 0; i < concurrentRequestCount; i++)
                 {
-                    var hammerTask = Task.Factory.StartNew(() =>
-                        SendRequest(restClient, hammerOptions.QueryStringParameters, hammerOptions.RequestHeaders));
+                    var requestResults = transformBlock.Receive();
 
-                    requestResultTasks.Add(hammerTask);
+                    aggregatedResults.Add(requestResults);
                 }
 
-                var taskResults = await Task.WhenAll(requestResultTasks);
-
-                var hammerSwingResults = taskResults.ToList();
-
-                hammerSwingResult.Add(new HammerSwingResult
+                hammerSwingResults.Add(new HammerSwingResult
                 {
-                    AverageResponseTime = hammerSwingResults.Average(a => a.ResponseMilliseconds),
-                    FailureCount = hammerSwingResults.Count(c => !c.IsSuccessful),
+                    AverageResponseTime = aggregatedResults.Average(a => a.ResponseMilliseconds),
+                    FailureCount = aggregatedResults.Count(c => !c.IsSuccessful),
                     TotalRequestCount = concurrentRequestCount,
-                    RequestResults = hammerSwingResults
+                    RequestResults = aggregatedResults
                 });
 
-                concurrentRequestCount += 5;
+                Thread.Sleep(500);
+
+                concurrentRequestCount += 1;
             }
 
             return new HammerStats
             {
-                HammerSwingStats = hammerSwingResult
+                HammerSwingStats = hammerSwingResults
             };
         }
 
-        private static RequestResult SendRequest(IRestClient restClient,
-            Dictionary<string, string> queryStringParameters, Dictionary<string, string> requestHeaders)
+        private RequestResult ExecuteConnection(HammerOptions hammerOptions)
         {
             var request = new RestRequest(Method.GET);
 
-            if (queryStringParameters != null && queryStringParameters.Any())
+            if (hammerOptions.QueryStringParameters != null && hammerOptions.QueryStringParameters.Any())
             {
-                foreach (var queryStringParameter in queryStringParameters)
+                foreach (var queryStringParameter in hammerOptions.QueryStringParameters)
                 {
                     request.AddQueryParameter(queryStringParameter.Key, queryStringParameter.Value);
                 }
             }
 
-            if (requestHeaders != null && requestHeaders.Any())
+            if (hammerOptions.RequestHeaders != null && hammerOptions.RequestHeaders.Any())
             {
-                foreach (var requestHeader in requestHeaders)
+                foreach (var requestHeader in hammerOptions.RequestHeaders)
                 {
                     request.AddHeader(requestHeader.Key, requestHeader.Value);
                 }
             }
+
+            return SendRequest(request, hammerOptions.Url);
+        }
+
+        private static RequestResult SendRequest(IRestRequest request, string url)
+        {
+            var restClient = new RestClient(new Uri(url));
 
             var requestStartDateTime = DateTime.Now;
 

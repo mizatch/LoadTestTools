@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using RestSharp;
 using System.Threading.Tasks.Dataflow;
 
@@ -10,19 +11,9 @@ namespace LoadTestTools.Core
 { 
     public class Drill
     {
-        private readonly IRestClient _restClient;
-
-        public Drill(IRestClient restClient)
-        {
-            _restClient = restClient;
-        }
-
-        public Drill()
-        {
-            _restClient = new RestClient();
-        }
-
-        public DrillStats DrillUrl(string url, int connectionCount, int drillTime, Dictionary<string, string> queryStringParameters)
+        [Obsolete("Please use the DrillUrl method which accepts DrillOptions")]
+        public DrillStats DrillUrl(string url, int connectionCount, int drillTime, 
+            Dictionary<string, string> queryStringParameters)
         {
             return ExecuteConnections(new DrillOptions
             {
@@ -32,7 +23,8 @@ namespace LoadTestTools.Core
                 QueryStringParameters = queryStringParameters
             });
         }
-        
+
+        [Obsolete("Please use the DrillUrl method which accepts DrillOptions")]
         public DrillStats DrillUrl(string url, int connectionCount, int drillTime)
         {
             return ExecuteConnections(new DrillOptions
@@ -50,6 +42,8 @@ namespace LoadTestTools.Core
 
         private DrillStats ExecuteConnections(DrillOptions drillOptions)
         {
+            ThreadPool.SetMinThreads(drillOptions.ConnectionCount, drillOptions.ConnectionCount);
+
             ServicePointManager.DefaultConnectionLimit = drillOptions.ConnectionCount;
 
             var aggregatedResults = new List<RequestResult>();
@@ -90,7 +84,7 @@ namespace LoadTestTools.Core
 
         private List<RequestResult> ExecuteConnection(DrillOptions drillOptions)
         {
-            _restClient.BaseUrl = new Uri(drillOptions.Url);
+            var restClient = new RestClient(new Uri(drillOptions.Url));
 
             var drillResults = new List<RequestResult>();
 
@@ -117,19 +111,24 @@ namespace LoadTestTools.Core
                     }
                 }
 
-                drillResults.Add(SendRequest(request));
+                drillResults.Add(SendRequest(request, restClient));
+
+                if (drillOptions.MillisecondsToWaitAfterRequest.HasValue)
+                {
+                    Thread.Sleep(drillOptions.MillisecondsToWaitAfterRequest.Value);
+                }
             }
 
             return drillResults;
         }
 
-        private RequestResult SendRequest(IRestRequest request)
+        private RequestResult SendRequest(IRestRequest request, RestClient restClient)
         {
             var requestStartDateTime = DateTime.Now;
 
             var requestStopwatch = Stopwatch.StartNew();
 
-            var restResponse = _restClient.Execute(request);
+            var restResponse = restClient.Execute(request);
 
             requestStopwatch.Stop();
 
