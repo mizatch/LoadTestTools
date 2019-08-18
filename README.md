@@ -63,6 +63,7 @@ Scenario: Drill URL with wait period
 	Then the average response time is less than '500' milliseconds
 	
 	And there are fewer than '5' failed responses
+```
 
 # Drill an API with GET requests with a URL and a collection of query string parameters
 
