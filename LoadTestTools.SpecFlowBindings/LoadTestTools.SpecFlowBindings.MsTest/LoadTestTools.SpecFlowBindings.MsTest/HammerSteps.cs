@@ -17,7 +17,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
         }
 
         [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' millseconds")]
-        public async Task WhenIHammerUpToConcurrentRequestsForAMaximumOfMillseconds(string url, int maximumConcurrentRequests, int maximumMillisecondsToHammer)
+        public void WhenIHammerUpToConcurrentRequestsForAMaximumOfMillseconds(string url, int maximumConcurrentRequests, int maximumMillisecondsToHammer)
         {
             var hammerOptions = new HammerOptions
             {
@@ -27,7 +27,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 RequestHeaders = AddRequestHeaders()
             };
 
-            var hammerStats = await Hammer.HammerUrl(hammerOptions);
+            var hammer = new Hammer();
+            var hammerStats = hammer.HammerUrl(hammerOptions);
 
             var aggregatedResults = hammerStats.HammerSwingStats.SelectMany(s => s.RequestResults).ToList();
 
@@ -37,7 +38,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
         }
 
         [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' millseconds, with query parameters")]
-        public async Task WhenIHammerWithUpToConcurrentRequestsForAMaximumOfMillsecondsWithQueryParameters(string url, int concurrentRequestCount, int maximumMillisecondsToHammer, Table table)
+        public void WhenIHammerWithUpToConcurrentRequestsForAMaximumOfMillsecondsWithQueryParameters(string url, int concurrentRequestCount, int maximumMillisecondsToHammer, Table table)
         {
             var queryStringParameters = new Dictionary<string, string>();
 
@@ -55,7 +56,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 QueryStringParameters = queryStringParameters
             };
 
-            var hammerStats = await Hammer.HammerUrl(hammerOptions);
+            var hammer = new Hammer();
+            var hammerStats = hammer.HammerUrl(hammerOptions);
 
             var aggregatedResults = hammerStats.HammerSwingStats.SelectMany(s => s.RequestResults).ToList();
 

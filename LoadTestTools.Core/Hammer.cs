@@ -76,7 +76,7 @@ namespace LoadTestTools.Core
             };
         }
 
-        private RequestResult ExecuteConnection(HammerOptions hammerOptions)
+        private static RequestResult ExecuteConnection(HammerOptions hammerOptions)
         {
             var request = new RestRequest(Method.GET);
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using LoadTestTools.Core;
 using TechTalk.SpecFlow;
 
@@ -15,6 +14,12 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             _scenarioContext = scenarioContext;
         }
 
+        [Given(@"I wait '(.*)' milliseconds after each request")]
+        public void GivenIWaitMillisecondsAfterEachRequest(int milliseconds)
+        {
+            _scenarioContext.Set(milliseconds, "MillisecondsToWaitAfterRequest");
+        }
+
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds")]
         public void WhenIDrillWithConcurrentConnectionsForMilliseconds(string url, int connectionCount, int millisecondsToDrill)
         {
@@ -23,7 +28,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 Url = url,
                 ConnectionCount = connectionCount,
                 MillisecondsToDrill = millisecondsToDrill,
-                RequestHeaders = AddRequestHeaders()
+                RequestHeaders = AddRequestHeaders(),
+                MillisecondsToWaitAfterRequest = GetMillisecondsToWaitAfterRequest()
             };
 
             var drill = new Drill();
@@ -33,7 +39,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             _scenarioContext.Set(drillStats.AverageResponseTime, "AverageResponseTime");
             _scenarioContext.Set(drillStats.FailureCount, "FailureCount");
         }
-
+        
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds, with query parameters")]
         public void WhenIDrillWithConcurrentConnectionsForMillisecondsWithQueryParameters(string url, int connectionCount, int millisecondsToDrill, Table table)
         {
@@ -50,7 +56,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 ConnectionCount = connectionCount,
                 MillisecondsToDrill = millisecondsToDrill,
                 RequestHeaders = AddRequestHeaders(),
-                QueryStringParameters = queryStringParameters
+                QueryStringParameters = queryStringParameters,
+                MillisecondsToWaitAfterRequest = GetMillisecondsToWaitAfterRequest()
             };
 
             var drill = new Drill();
@@ -71,6 +78,16 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             var requestHeaders = _scenarioContext.Get<Dictionary<string, string>>("RequestHeaders");
 
             return requestHeaders ?? new Dictionary<string, string>();
+        }
+
+        private int? GetMillisecondsToWaitAfterRequest()
+        {
+            if (!_scenarioContext.ContainsKey("MillisecondsToWaitAfterRequest"))
+            {
+                return null;
+            }
+
+            return _scenarioContext.Get<int>("MillisecondsToWaitAfterRequest");
         }
     }
 }
