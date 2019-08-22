@@ -52,6 +52,19 @@ Scenario: Drill URL
 	And there are fewer than '5' failed responses
 ```
 
+# Add a wait period between requests within a connection
+
+```
+Scenario: Drill URL with wait period
+	Given I wait '50' milliseconds after each request
+
+	When I drill 'https://{Enter your URL here}' with '2' concurrent connections for '2000' milliseconds
+	
+	Then the average response time is less than '500' milliseconds
+	
+	And there are fewer than '5' failed responses
+```
+
 # Drill an API with GET requests with a URL and a collection of query string parameters
 
 ```
