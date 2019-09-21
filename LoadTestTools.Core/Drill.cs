@@ -72,7 +72,7 @@ namespace LoadTestTools.Core
                 aggregatedResults.AddRange(requestResults);
             }
 
-            return new DrillStats
+            var drillStats = new DrillStats
             {
                 AverageResponseTime = aggregatedResults.Average(a => a.ResponseMilliseconds),
                 ConnectionCount = drillOptions.ConnectionCount,
@@ -80,6 +80,10 @@ namespace LoadTestTools.Core
                 FailureCount = aggregatedResults.Count(c => !c.IsSuccessful),
                 RequestResults = aggregatedResults
             };
+
+            drillOptions.Recorder?.RecordDrill(drillOptions, drillStats);
+
+            return drillStats;
         }
 
         private List<RequestResult> ExecuteConnection(DrillOptions drillOptions)

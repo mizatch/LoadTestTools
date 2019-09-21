@@ -12,10 +12,8 @@
     <PackageLicenseUrl>https://github.com/mizatch/LoadTestTools/blob/master/LICENSE</PackageLicenseUrl>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <Version>3.0.0</Version>
-    <PackageReleaseNotes>- Hammer no longer has static public methods and now must be instantiated.  HammerUrl is no longer an awaitable Task.
-- Improved threading and performance of Hammer and Drill.
-- Added a DrillOptions parameter for setting a delay between requests within a connection.</PackageReleaseNotes>
+    <Version>3.1.0</Version>
+    <PackageReleaseNotes>-Added functionality to record/save Drill and Hammer results by supplying an IRecorder implementation.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

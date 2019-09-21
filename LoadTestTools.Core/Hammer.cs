@@ -16,7 +16,7 @@ namespace LoadTestTools.Core
             return ExecuteConnections(hammerOptions);
         }
 
-        private HammerStats ExecuteConnections(HammerOptions hammerOptions)
+        private static HammerStats ExecuteConnections(HammerOptions hammerOptions)
         {
             ThreadPool.SetMinThreads(hammerOptions.MaximumConcurrentRequests, hammerOptions.MaximumConcurrentRequests);
 
@@ -70,10 +70,14 @@ namespace LoadTestTools.Core
                 concurrentRequestCount += 1;
             }
 
-            return new HammerStats
+            var hammerStats = new HammerStats
             {
                 HammerSwingStats = hammerSwingResults
             };
+
+            hammerOptions.Recorder?.RecordHammer(hammerOptions, hammerStats);
+
+            return hammerStats;
         }
 
         private static RequestResult ExecuteConnection(HammerOptions hammerOptions)

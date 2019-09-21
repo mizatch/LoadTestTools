@@ -9,5 +9,6 @@ namespace LoadTestTools.Core
         public int MaximumMillisecondsToHammer { get; set; }
         public Dictionary<string, string> QueryStringParameters { get; set; }
         public Dictionary<string, string> RequestHeaders { get; set; }
+        public IRecorder Recorder { get; set; }
     }
 }
