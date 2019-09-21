@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>Mitchell Lake</Authors>
+    <Company>Gillion Group LLC</Company>
+    <Description>The package can be used to record LoadTestTools results to Application Insights.  To use, simply supply your instrumentation key:
+
+  <appSettings>
+    <add key="Recorder.AppInsights.InstrumentationKey" value="your-instrumentation-key" />
+  </appSettings></Description>
+    <Copyright>Copyright 2019 Gillion Group LLC.  All rights reserved.</Copyright>
+    <PackageLicenseUrl>https://github.com/mizatch/LoadTestTools/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/mizatch/LoadTestTools</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mizatch/LoadTestTools</RepositoryUrl>
+    <PackageTags>Load Test, Test, Application Insights, API Test</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LoadTestTools.Core" Version="3.1.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.10.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+  </ItemGroup>
+
+</Project>
