@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using LoadTestTools.Core;
+using LoadTestTools.Recording.AppInsights;
 using TechTalk.SpecFlow;
 
 namespace LoadTestTools.SpecFlowBindings.MsTest
@@ -20,6 +21,12 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             _scenarioContext.Set(milliseconds, "MillisecondsToWaitAfterRequest");
         }
 
+        [Given(@"I want to record results to Application Insights")]
+        public void GivenIWantToRecordResultsToApplicationInsights()
+        {
+            _scenarioContext.Set(new AppInsightsRecorder(), "Recorder");
+        }
+
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds")]
         public void WhenIDrillWithConcurrentConnectionsForMilliseconds(string url, int connectionCount, int millisecondsToDrill)
         {
@@ -29,7 +36,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 ConnectionCount = connectionCount,
                 MillisecondsToDrill = millisecondsToDrill,
                 RequestHeaders = AddRequestHeaders(),
-                MillisecondsToWaitAfterRequest = GetMillisecondsToWaitAfterRequest()
+                MillisecondsToWaitAfterRequest = GetMillisecondsToWaitAfterRequest(),
+                Recorder = GetRecorder()
             };
 
             var drill = new Drill();
@@ -57,7 +65,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 MillisecondsToDrill = millisecondsToDrill,
                 RequestHeaders = AddRequestHeaders(),
                 QueryStringParameters = queryStringParameters,
-                MillisecondsToWaitAfterRequest = GetMillisecondsToWaitAfterRequest()
+                MillisecondsToWaitAfterRequest = GetMillisecondsToWaitAfterRequest(),
+                Recorder = GetRecorder()
             };
 
             var drill = new Drill();
@@ -88,6 +97,13 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             }
 
             return _scenarioContext.Get<int>("MillisecondsToWaitAfterRequest");
+        }
+
+        private IRecorder GetRecorder()
+        {
+            return _scenarioContext.ContainsKey("Recorder") ?
+                _scenarioContext.Get<IRecorder>("Recorder") :
+                new DoNotRecord();
         }
     }
 }

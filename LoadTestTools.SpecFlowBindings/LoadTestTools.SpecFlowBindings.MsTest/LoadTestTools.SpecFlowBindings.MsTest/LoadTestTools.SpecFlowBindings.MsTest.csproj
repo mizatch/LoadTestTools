@@ -12,18 +12,19 @@
     <Authors>Mitchell Lake</Authors>
     <Company>Gillion Group LLC</Company>
     <Description>Shared step definition file to load test API's.</Description>
-    <Copyright>2019 Gillion Group LLC</Copyright>
+    <Copyright>2019 Gillion Group LLC.  All rights reserved.</Copyright>
     <PackageLicenseUrl>https://github.com/mizatch/LoadTestTools/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/mizatch/LoadTestTools</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mizatch/LoadTestTools</RepositoryUrl>
-    <Version>1.0.5</Version>
+    <Version>1.1.0</Version>
     <PackageTags>Load Test API SpecFlow Bindings</PackageTags>
-    <PackageReleaseNotes>- Upgraded to core version 3.0.0. 
-- Added hook to set a wait time between requests.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Upgraded LoadTestTools.Core to version 3.1.0
+- Added hooks to record results to Application Insights</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LoadTestTools.Core" Version="3.0.0" />
+    <PackageReference Include="LoadTestTools.Core" Version="3.1.0" />
+    <PackageReference Include="LoadTestTools.Recording.AppInsights" Version="1.0.0" />
     <PackageReference Include="SpecFlow.MsTest" Version="3.0.225" />
   </ItemGroup>
 

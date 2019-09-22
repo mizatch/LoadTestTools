@@ -6,7 +6,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Authors>Mitchell Lake</Authors>
     <Company>Gillion Group LLC</Company>
-    <Copyright>2019 Gillion Group LLC</Copyright>
+    <Copyright>2019 Gillion Group LLC.  All rights reserved.</Copyright>
     <PackageProjectUrl>https://github.com/mizatch/LoadTestTools</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mizatch/LoadTestTools</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/mizatch/LoadTestTools/blob/master/LICENSE</PackageLicenseUrl>

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using LoadTestTools.Core;
 using TechTalk.SpecFlow;
 
@@ -17,14 +16,16 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
         }
 
         [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' millseconds")]
-        public void WhenIHammerUpToConcurrentRequestsForAMaximumOfMillseconds(string url, int maximumConcurrentRequests, int maximumMillisecondsToHammer)
+        [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' milliseconds")]
+        public void WhenIHammerUpToConcurrentRequestsForAMaximumOfMilliseconds(string url, int maximumConcurrentRequests, int maximumMillisecondsToHammer)
         {
             var hammerOptions = new HammerOptions
             {
                 Url = url,
                 MaximumConcurrentRequests = maximumConcurrentRequests,
                 MaximumMillisecondsToHammer = maximumMillisecondsToHammer,
-                RequestHeaders = AddRequestHeaders()
+                RequestHeaders = AddRequestHeaders(),
+                Recorder = GetRecorder()
             };
 
             var hammer = new Hammer();
@@ -38,7 +39,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
         }
 
         [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' millseconds, with query parameters")]
-        public void WhenIHammerWithUpToConcurrentRequestsForAMaximumOfMillsecondsWithQueryParameters(string url, int concurrentRequestCount, int maximumMillisecondsToHammer, Table table)
+        [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' milliseconds, with query parameters")]
+        public void WhenIHammerWithUpToConcurrentRequestsForAMaximumOfMillisecondsWithQueryParameters(string url, int concurrentRequestCount, int maximumMillisecondsToHammer, Table table)
         {
             var queryStringParameters = new Dictionary<string, string>();
 
@@ -53,7 +55,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 MaximumConcurrentRequests = concurrentRequestCount,
                 MaximumMillisecondsToHammer = maximumMillisecondsToHammer,
                 RequestHeaders = AddRequestHeaders(),
-                QueryStringParameters = queryStringParameters
+                QueryStringParameters = queryStringParameters,
+                Recorder = GetRecorder()
             };
 
             var hammer = new Hammer();
@@ -76,6 +79,13 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             var requestHeaders = _scenarioContext.Get<Dictionary<string, string>>("RequestHeaders");
 
             return requestHeaders ?? new Dictionary<string, string>();
+        }
+
+        private IRecorder GetRecorder()
+        {
+            return _scenarioContext.ContainsKey("Recorder") ?
+                _scenarioContext.Get<IRecorder>("Recorder") :
+                new DoNotRecord();
         }
 
     }
