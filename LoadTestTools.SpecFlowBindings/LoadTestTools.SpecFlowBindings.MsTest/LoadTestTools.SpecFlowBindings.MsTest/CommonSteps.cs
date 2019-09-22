@@ -34,7 +34,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             var actualAverageResponseTime = _scenarioContext.Get<decimal>("AverageResponseTime");
 
             Assert.IsTrue(actualAverageResponseTime < expectedAverageResponseTime,
-                $"Average Response Time did not achieve expectation of {expectedAverageResponseTime} milliseconds.  Actual Average Respose Time was {actualAverageResponseTime}");
+                $"Average Response Time did not achieve expectation of {expectedAverageResponseTime} milliseconds.  Actual Average Response Time was {actualAverageResponseTime}");
 
             Console.WriteLine($"Actual Average Response Time: { actualAverageResponseTime}");
         }
