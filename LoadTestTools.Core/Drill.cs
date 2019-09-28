@@ -40,9 +40,10 @@ namespace LoadTestTools.Core
             return ExecuteConnections(drillOptions);
         }
 
-        private DrillStats ExecuteConnections(DrillOptions drillOptions)
+        private static DrillStats ExecuteConnections(DrillOptions drillOptions)
         {
-            ThreadPool.SetMinThreads(drillOptions.ConnectionCount, drillOptions.ConnectionCount);
+            ThreadPool.SetMinThreads(drillOptions.ConnectionCount, 
+                drillOptions.ConnectionCount);
 
             ServicePointManager.DefaultConnectionLimit = drillOptions.ConnectionCount;
 
@@ -58,7 +59,8 @@ namespace LoadTestTools.Core
                 MaxDegreeOfParallelism = drillOptions.ConnectionCount
             };
 
-            var transformBlock = new TransformBlock<DrillOptions, List<RequestResult>>((Func<DrillOptions, List<RequestResult>>) RequestFunc, executionDataflowBlockOptions);
+            var transformBlock = new TransformBlock<DrillOptions, List<RequestResult>>(
+                RequestFunc, executionDataflowBlockOptions);
 
             for (var i = 0; i < drillOptions.ConnectionCount; i++)
             {
@@ -86,7 +88,7 @@ namespace LoadTestTools.Core
             return drillStats;
         }
 
-        private List<RequestResult> ExecuteConnection(DrillOptions drillOptions)
+        private static List<RequestResult> ExecuteConnection(DrillOptions drillOptions)
         {
             var restClient = new RestClient(new Uri(drillOptions.Url));
 
@@ -97,23 +99,9 @@ namespace LoadTestTools.Core
 
             while (sessionStopWatch.Elapsed < TimeSpan.FromMilliseconds(drillOptions.MillisecondsToDrill))
             {
-                var request = new RestRequest(Method.GET);
+                var request = CreateRequest(drillOptions);
 
-                if (drillOptions.QueryStringParameters != null && drillOptions.QueryStringParameters.Any())
-                {
-                    foreach (var queryStringParameter in drillOptions.QueryStringParameters)
-                    {
-                        request.AddQueryParameter(queryStringParameter.Key, queryStringParameter.Value);
-                    }
-                }
-
-                if (drillOptions.RequestHeaders != null && drillOptions.RequestHeaders.Any())
-                {
-                    foreach (var requestHeader in drillOptions.RequestHeaders)
-                    {
-                        request.AddHeader(requestHeader.Key, requestHeader.Value);
-                    }
-                }
+                ExecutePreDrillProcesses(drillOptions, request);
 
                 drillResults.Add(SendRequest(request, restClient));
 
@@ -126,7 +114,43 @@ namespace LoadTestTools.Core
             return drillResults;
         }
 
-        private RequestResult SendRequest(IRestRequest request, RestClient restClient)
+        private static RestRequest CreateRequest(DrillOptions drillOptions)
+        {
+            var request = new RestRequest(Method.GET);
+
+            if (drillOptions.QueryStringParameters != null && drillOptions.QueryStringParameters.Any())
+            {
+                foreach (var queryStringParameter in drillOptions.QueryStringParameters)
+                {
+                    request.AddQueryParameter(queryStringParameter.Key, queryStringParameter.Value);
+                }
+            }
+
+            if (drillOptions.RequestHeaders != null && drillOptions.RequestHeaders.Any())
+            {
+                foreach (var requestHeader in drillOptions.RequestHeaders)
+                {
+                    request.AddHeader(requestHeader.Key, requestHeader.Value);
+                }
+            }
+
+            return request;
+        }
+
+        private static void ExecutePreDrillProcesses(DrillOptions drillOptions, RestRequest request)
+        {
+            if (drillOptions.PreDrillProcesses == null || !drillOptions.PreDrillProcesses.Any())
+            {
+                return;
+            }
+
+            foreach (var drillOptionsDrillPreProcessor in drillOptions.PreDrillProcesses)
+            {
+                drillOptionsDrillPreProcessor.Execute(drillOptions, request);
+            }
+        }
+
+        private static RequestResult SendRequest(IRestRequest request, IRestClient restClient)
         {
             var requestStartDateTime = DateTime.Now;
 

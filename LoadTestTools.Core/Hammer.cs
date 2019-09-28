@@ -36,7 +36,8 @@ namespace LoadTestTools.Core
                 MaxDegreeOfParallelism = hammerOptions.MaximumConcurrentRequests
             };
 
-            var transformBlock = new TransformBlock<HammerOptions, RequestResult>((Func<HammerOptions, RequestResult>)RequestFunc, executionDataflowBlockOptions);
+            var transformBlock = new TransformBlock<HammerOptions, RequestResult>(
+                RequestFunc, executionDataflowBlockOptions);
 
             var maximumRuntimeStopWatch = Stopwatch.StartNew();
 
@@ -82,6 +83,28 @@ namespace LoadTestTools.Core
 
         private static RequestResult ExecuteConnection(HammerOptions hammerOptions)
         {
+            var request = CreateRequest(hammerOptions);
+
+            ExecutePreProcesses(hammerOptions, request);
+
+            return SendRequest(request, hammerOptions.Url);
+        }
+
+        private static void ExecutePreProcesses(HammerOptions hammerOptions, RestRequest request)
+        {
+            if (hammerOptions.PreHammerProcesses == null)
+            {
+                return;
+            }
+
+            foreach (var hammerOptionsPreHammerProcess in hammerOptions.PreHammerProcesses)
+            {
+                hammerOptionsPreHammerProcess.Execute(hammerOptions, request);
+            }
+        }
+
+        private static RestRequest CreateRequest(HammerOptions hammerOptions)
+        {
             var request = new RestRequest(Method.GET);
 
             if (hammerOptions.QueryStringParameters != null && hammerOptions.QueryStringParameters.Any())
@@ -100,7 +123,7 @@ namespace LoadTestTools.Core
                 }
             }
 
-            return SendRequest(request, hammerOptions.Url);
+            return request;
         }
 
         private static RequestResult SendRequest(IRestRequest request, string url)

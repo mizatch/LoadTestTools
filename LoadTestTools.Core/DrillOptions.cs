@@ -11,5 +11,6 @@ namespace LoadTestTools.Core
         public Dictionary<string, string> QueryStringParameters { get; set; }
         public Dictionary<string, string> RequestHeaders { get; set; }
         public IRecorder Recorder { get; set; }
+        public IEnumerable<IPreDrillProcess> PreDrillProcesses { get; set; }
     }
 }
