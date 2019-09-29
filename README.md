@@ -116,7 +116,7 @@ Given the request headers
 ```
 
 
-# Getting to the data
+# Getting to the data from within a SpecFlow test
 
 Any data which is returned by a Drill/Hammer operation is stored in SpecFlow's ScenarioContext.
 
@@ -161,4 +161,18 @@ public class HammerSwingResult
 	public int FailureCount { get; set; }
 	public List<RequestResult> RequestResults { get; set; }
 }
+```
+
+# Recorders - Recording Data
+You might find that you want to record the Drill/Hammer stats out to a data store so that you can query and analyze the data later.  This is where Recorders come in handy.  Currently, we have one Recorder available and it records data to App Insights.  To use it, install the LoadTestTools.Recording.AppInsights Nuget package.  You can also implement your own implementation of IRecorder.
+
+## AppInsights Recorder
+
+1. Install LoadTestTools.Recording.AppInsights.
+2. Supply the App Insights Instrumentation key in your configuration file: 
+	<add key="Recorder.AppInsights.InstrumentationKey" value="0494f00b-493d-4bb6-ae61-b5960cb68dcd" />
+3. Initialize the recorder in a Given step.
+
+```
+Given I want to record results to Application Insights
 ```
