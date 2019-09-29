@@ -169,8 +169,7 @@ You might find that you want to record the Drill/Hammer stats out to a data stor
 ## AppInsights Recorder
 
 1. Install LoadTestTools.Recording.AppInsights.
-2. Supply the App Insights Instrumentation key in your configuration file: 
-	<add key="Recorder.AppInsights.InstrumentationKey" value="0494f00b-493d-4bb6-ae61-b5960cb68dcd" />
+2. Supply the App Insights Instrumentation key in your configuration file using the key 'Recorder.AppInsights.InstrumentationKey'
 3. Initialize the recorder in a Given step.
 
 ```
