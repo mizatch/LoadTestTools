@@ -37,7 +37,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 MillisecondsToDrill = millisecondsToDrill,
                 RequestHeaders = AddRequestHeaders(),
                 MillisecondsToWaitAfterRequest = GetMillisecondsToWaitAfterRequest(),
-                Recorder = GetRecorder()
+                Recorder = GetRecorder(),
+                PreDrillProcesses = GetPreDrillProcesses()
             };
 
             var drill = new Drill();
@@ -66,7 +67,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 RequestHeaders = AddRequestHeaders(),
                 QueryStringParameters = queryStringParameters,
                 MillisecondsToWaitAfterRequest = GetMillisecondsToWaitAfterRequest(),
-                Recorder = GetRecorder()
+                Recorder = GetRecorder(),
+                PreDrillProcesses = GetPreDrillProcesses()
             };
 
             var drill = new Drill();
@@ -104,6 +106,13 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             return _scenarioContext.ContainsKey("Recorder") ?
                 _scenarioContext.Get<IRecorder>("Recorder") :
                 new DoNotRecord();
+        }
+
+        private IEnumerable<IPreDrillProcess> GetPreDrillProcesses()
+        {
+            return _scenarioContext.ContainsKey("PreDrillProcesses") ?
+                _scenarioContext.Get<IEnumerable<IPreDrillProcess>>("PreDrillProcesses") :
+                null;
         }
     }
 }

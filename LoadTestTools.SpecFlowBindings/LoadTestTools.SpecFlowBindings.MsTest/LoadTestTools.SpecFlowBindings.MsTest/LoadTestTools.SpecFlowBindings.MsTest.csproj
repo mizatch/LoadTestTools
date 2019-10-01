@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LoadTestTools.Core" Version="3.1.0" />
+    <PackageReference Include="LoadTestTools.Core" Version="3.2.0" />
     <PackageReference Include="LoadTestTools.Recording.AppInsights" Version="1.0.0" />
     <PackageReference Include="SpecFlow.MsTest" Version="3.0.225" />
   </ItemGroup>

@@ -25,7 +25,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 MaximumConcurrentRequests = maximumConcurrentRequests,
                 MaximumMillisecondsToHammer = maximumMillisecondsToHammer,
                 RequestHeaders = AddRequestHeaders(),
-                Recorder = GetRecorder()
+                Recorder = GetRecorder(),
+                PreHammerProcesses = GetPreHammerProcesses()
             };
 
             var hammer = new Hammer();
@@ -37,7 +38,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             _scenarioContext.Set(aggregatedResults.Average(a => a.ResponseMilliseconds), "AverageResponseTime");
             _scenarioContext.Set(aggregatedResults.Count(c => !c.IsSuccessful), "FailureCount");
         }
-
+        
         [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' millseconds, with query parameters")]
         [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' milliseconds, with query parameters")]
         public void WhenIHammerWithUpToConcurrentRequestsForAMaximumOfMillisecondsWithQueryParameters(string url, int concurrentRequestCount, int maximumMillisecondsToHammer, Table table)
@@ -56,7 +57,8 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 MaximumMillisecondsToHammer = maximumMillisecondsToHammer,
                 RequestHeaders = AddRequestHeaders(),
                 QueryStringParameters = queryStringParameters,
-                Recorder = GetRecorder()
+                Recorder = GetRecorder(),
+                PreHammerProcesses = GetPreHammerProcesses()
             };
 
             var hammer = new Hammer();
@@ -86,6 +88,13 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             return _scenarioContext.ContainsKey("Recorder") ?
                 _scenarioContext.Get<IRecorder>("Recorder") :
                 new DoNotRecord();
+        }
+
+        private IEnumerable<IPreHammerProcess> GetPreHammerProcesses()
+        {
+            return _scenarioContext.ContainsKey("PreHammerProcesses") ?
+                _scenarioContext.Get<IEnumerable<IPreHammerProcess>>("PreHammerProcesses") :
+                null;
         }
 
     }
