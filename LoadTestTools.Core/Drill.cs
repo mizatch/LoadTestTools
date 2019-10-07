@@ -94,15 +94,15 @@ namespace LoadTestTools.Core
 
             var drillResults = new List<RequestResult>();
 
+            var request = CreateRequest(drillOptions);
+
+            ExecutePreDrillProcesses(drillOptions, request);
+
             var sessionStopWatch = new Stopwatch();
             sessionStopWatch.Start();
 
             while (sessionStopWatch.Elapsed < TimeSpan.FromMilliseconds(drillOptions.MillisecondsToDrill))
             {
-                var request = CreateRequest(drillOptions);
-
-                ExecutePreDrillProcesses(drillOptions, request);
-
                 drillResults.Add(SendRequest(request, restClient));
 
                 if (drillOptions.MillisecondsToWaitAfterRequest.HasValue)
