@@ -2,6 +2,7 @@
 using LoadTestTools.Core;
 using LoadTestTools.Recording.AppInsights;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace LoadTestTools.SpecFlowBindings.MsTest
 {
@@ -41,14 +42,30 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 PreDrillProcesses = GetPreDrillProcesses()
             };
 
-            var drill = new Drill();
-            var drillStats = drill.DrillUrl(drillOptions);
-
-            _scenarioContext.Set(drillStats, "DrillStats");
-            _scenarioContext.Set(drillStats.AverageResponseTime, "AverageResponseTime");
-            _scenarioContext.Set(drillStats.FailureCount, "FailureCount");
+            DrillUrl(drillOptions);
         }
         
+        [When(@"I drill '(.*)' with '(.*)' concurrent '(.*)' connections for '(.*)' milliseconds and Json payload")]
+        public void WhenIDrillWithConcurrentConnectionsForMillisecondsAndPayload(string url, int connectionCount, 
+            RequestMethod requestMethod, int millisecondsToDrill, Table table)
+        {
+            var drillOptions = new DrillOptions
+            {
+                Url = url,
+                RequestMethod = requestMethod,
+                BodyType = BodyType.Json,
+                Body = table.CreateDynamicInstance(),
+                ConnectionCount = connectionCount,
+                MillisecondsToDrill = millisecondsToDrill,
+                RequestHeaders = AddRequestHeaders(),
+                MillisecondsToWaitAfterRequest = GetMillisecondsToWaitAfterRequest(),
+                Recorder = GetRecorder(),
+                PreDrillProcesses = GetPreDrillProcesses()
+            };
+
+            DrillUrl(drillOptions);
+        }
+
         [When(@"I drill '(.*)' with '(.*)' concurrent connections for '(.*)' milliseconds, with query parameters")]
         public void WhenIDrillWithConcurrentConnectionsForMillisecondsWithQueryParameters(string url, int connectionCount, int millisecondsToDrill, Table table)
         {
@@ -71,12 +88,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 PreDrillProcesses = GetPreDrillProcesses()
             };
 
-            var drill = new Drill();
-            var drillStats = drill.DrillUrl(drillOptions);
-
-            _scenarioContext.Set(drillStats, "DrillStats");
-            _scenarioContext.Set(drillStats.AverageResponseTime, "AverageResponseTime");
-            _scenarioContext.Set(drillStats.FailureCount, "FailureCount");
+            DrillUrl(drillOptions);
         }
 
         private Dictionary<string, string> AddRequestHeaders()
@@ -113,6 +125,16 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             return _scenarioContext.ContainsKey("PreDrillProcesses") ?
                 _scenarioContext.Get<IEnumerable<IPreDrillProcess>>("PreDrillProcesses") :
                 null;
+        }
+
+        private void DrillUrl(DrillOptions drillOptions)
+        {
+            var drill = new Drill();
+            var drillStats = drill.DrillUrl(drillOptions);
+
+            _scenarioContext.Set(drillStats, "DrillStats");
+            _scenarioContext.Set(drillStats.AverageResponseTime, "AverageResponseTime");
+            _scenarioContext.Set(drillStats.FailureCount, "FailureCount");
         }
     }
 }

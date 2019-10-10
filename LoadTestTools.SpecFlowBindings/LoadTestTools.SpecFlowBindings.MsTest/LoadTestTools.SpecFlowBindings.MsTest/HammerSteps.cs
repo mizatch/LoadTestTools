@@ -2,6 +2,7 @@
 using System.Linq;
 using LoadTestTools.Core;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace LoadTestTools.SpecFlowBindings.MsTest
 {
@@ -29,16 +30,29 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 PreHammerProcesses = GetPreHammerProcesses()
             };
 
-            var hammer = new Hammer();
-            var hammerStats = hammer.HammerUrl(hammerOptions);
-
-            var aggregatedResults = hammerStats.HammerSwingStats.SelectMany(s => s.RequestResults).ToList();
-
-            _scenarioContext.Set(hammerStats, "HammerStats");
-            _scenarioContext.Set(aggregatedResults.Average(a => a.ResponseMilliseconds), "AverageResponseTime");
-            _scenarioContext.Set(aggregatedResults.Count(c => !c.IsSuccessful), "FailureCount");
+            HammerUrl(hammerOptions);
         }
         
+        [When(@"I hammer '(.*)' with up to '(.*)' concurrent '(.*)' requests for a maximum of '(.*)' milliseconds and Json payload")]
+        public void WhenIHammerWithUpToConcurrentRequestsForAMaximumOfMilliseconds(string url, int maximumConcurrentRequests, RequestMethod requestMethod, int maximumMillisecondsToHammer, Table table)
+        {
+            var hammerOptions = new HammerOptions
+            {
+                Url = url,
+                RequestMethod = requestMethod,
+                BodyType = BodyType.Json,
+                Body = table.CreateDynamicInstance(),
+                MaximumConcurrentRequests = maximumConcurrentRequests,
+                MaximumMillisecondsToHammer = maximumMillisecondsToHammer,
+                RequestHeaders = AddRequestHeaders(),
+                Recorder = GetRecorder(),
+                PreHammerProcesses = GetPreHammerProcesses()
+            };
+
+            HammerUrl(hammerOptions);
+        }
+
+
         [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' millseconds, with query parameters")]
         [When(@"I hammer '(.*)' with up to '(.*)' concurrent requests for a maximum of '(.*)' milliseconds, with query parameters")]
         public void WhenIHammerWithUpToConcurrentRequestsForAMaximumOfMillisecondsWithQueryParameters(string url, int concurrentRequestCount, int maximumMillisecondsToHammer, Table table)
@@ -61,14 +75,7 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
                 PreHammerProcesses = GetPreHammerProcesses()
             };
 
-            var hammer = new Hammer();
-            var hammerStats = hammer.HammerUrl(hammerOptions);
-
-            var aggregatedResults = hammerStats.HammerSwingStats.SelectMany(s => s.RequestResults).ToList();
-
-            _scenarioContext.Set(hammerStats, "HammerStats");
-            _scenarioContext.Set(aggregatedResults.Average(a => a.ResponseMilliseconds), "AverageResponseTime");
-            _scenarioContext.Set(aggregatedResults.Count(c => !c.IsSuccessful), "FailureCount");
+            HammerUrl(hammerOptions);
         }
 
         private Dictionary<string, string> AddRequestHeaders()
@@ -95,6 +102,18 @@ namespace LoadTestTools.SpecFlowBindings.MsTest
             return _scenarioContext.ContainsKey("PreHammerProcesses") ?
                 _scenarioContext.Get<IEnumerable<IPreHammerProcess>>("PreHammerProcesses") :
                 null;
+        }
+
+        private void HammerUrl(HammerOptions hammerOptions)
+        {
+            var hammer = new Hammer();
+            var hammerStats = hammer.HammerUrl(hammerOptions);
+
+            var aggregatedResults = hammerStats.HammerSwingStats.SelectMany(s => s.RequestResults).ToList();
+
+            _scenarioContext.Set(hammerStats, "HammerStats");
+            _scenarioContext.Set(aggregatedResults.Average(a => a.ResponseMilliseconds), "AverageResponseTime");
+            _scenarioContext.Set(aggregatedResults.Count(c => !c.IsSuccessful), "FailureCount");
         }
 
     }
