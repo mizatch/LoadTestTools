@@ -96,12 +96,61 @@ namespace LoadTestTools.SpecFlowSample.MsTest
 #line 3
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 4
+#line 5
  testRunner.When("I drill \'https://{Enter your URL here}\' with \'2\' concurrent connections for \'2000" +
                     "\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 6
+#line 7
  testRunner.Then("the average response time is less than \'500\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 8
+#line 9
+ testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Drill URL and record to Application Insights")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "DrillUrlTests")]
+        public virtual void DrillURLAndRecordToApplicationInsights()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drill URL and record to Application Insights", null, ((string[])(null)));
+#line 12
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 14
+ testRunner.Given("I want to record results to Application Insights", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 16
+ testRunner.When("I drill \'https://{Enter your URL here}\' with \'2\' concurrent connections for \'2000" +
+                    "\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 18
+ testRunner.Then("the average response time is less than \'500\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 20
+ testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Drill URL with POST requests and Json payload")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "DrillUrlTests")]
+        public virtual void DrillURLWithPOSTRequestsAndJsonPayload()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drill URL with POST requests and Json payload", null, ((string[])(null)));
+#line 23
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 25
+ testRunner.Given("I wait \'0\' milliseconds after each request", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Key"});
+            table1.AddRow(new string[] {
+                        "Value"});
+#line 27
+ testRunner.When("I drill \'https://{Enter your URL here}\' with \'20\' concurrent \'POST\' connections f" +
+                    "or \'30000\' milliseconds and Json payload", ((string)(null)), table1, "When ");
+#line 31
+ testRunner.Then("the average response time is less than \'5000\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 33
  testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -113,22 +162,22 @@ this.ScenarioInitialize(scenarioInfo);
         public virtual void DrillURLWithParameters()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drill URL with parameters", null, ((string[])(null)));
-#line 11
+#line 36
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line hidden
-            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Key",
                         "Value"});
-            table1.AddRow(new string[] {
+            table2.AddRow(new string[] {
                         "text",
                         "example_text"});
-#line 12
+#line 37
  testRunner.When("I drill \'https://{Enter your URL here}\' with \'2\' concurrent connections for \'2000" +
-                    "\' milliseconds, with query parameters", ((string)(null)), table1, "When ");
-#line 16
+                    "\' milliseconds, with query parameters", ((string)(null)), table2, "When ");
+#line 41
  testRunner.Then("the average response time is less than \'500\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 18
+#line 43
  testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -140,24 +189,24 @@ this.ScenarioInitialize(scenarioInfo);
         public virtual void DrillURLWithRequestHeaders()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Drill URL with request headers", null, ((string[])(null)));
-#line 21
+#line 46
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line hidden
-            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                         "Key",
                         "Value"});
-            table2.AddRow(new string[] {
+            table3.AddRow(new string[] {
                         "Authorization",
                         "Bearer blahblahblah"});
-#line 22
- testRunner.Given("the request headers", ((string)(null)), table2, "Given ");
-#line 26
+#line 47
+ testRunner.Given("the request headers", ((string)(null)), table3, "Given ");
+#line 51
  testRunner.When("I drill \'https://{Enter your URL here}\' with \'2\' concurrent connections for \'2000" +
                     "\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 28
+#line 53
  testRunner.Then("the average response time is less than \'500\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 30
+#line 55
  testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

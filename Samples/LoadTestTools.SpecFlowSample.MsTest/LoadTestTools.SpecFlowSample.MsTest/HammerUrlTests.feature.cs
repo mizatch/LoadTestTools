@@ -108,27 +108,74 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Hammer URL and record to Application Insights")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "HammerUrlTests")]
+        public virtual void HammerURLAndRecordToApplicationInsights()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hammer URL and record to Application Insights", null, ((string[])(null)));
+#line 11
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 13
+ testRunner.Given("I want to record results to Application Insights", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 15
+ testRunner.When("I hammer \'https://{Enter your URL here}\' with up to \'20\' concurrent requests for " +
+                    "a maximum of \'30000\' millseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 17
+ testRunner.Then("the average response time is less than \'1000\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 19
+ testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Hammer URL with POST requests and Json payload")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "HammerUrlTests")]
+        public virtual void HammerURLWithPOSTRequestsAndJsonPayload()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hammer URL with POST requests and Json payload", null, ((string[])(null)));
+#line 22
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line hidden
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Key"});
+            table4.AddRow(new string[] {
+                        "Value"});
+#line 24
+ testRunner.When("I hammer \'https://{Enter your URL here}\' with up to \'20\' concurrent \'POST\' reques" +
+                    "ts for a maximum of \'30000\' milliseconds and Json payload", ((string)(null)), table4, "When ");
+#line 28
+ testRunner.Then("the average response time is less than \'1000\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 30
+ testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Hammer URL with parameters")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "HammerUrlTests")]
         public virtual void HammerURLWithParameters()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hammer URL with parameters", null, ((string[])(null)));
-#line 11
+#line 33
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line hidden
-            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                         "Key",
                         "Value"});
-            table3.AddRow(new string[] {
+            table5.AddRow(new string[] {
                         "text",
                         "example_text"});
-#line 12
+#line 34
  testRunner.When("I hammer \'https://{Enter your URL here}\' with up to \'20\' concurrent requests for " +
-                    "a maximum of \'30000\' millseconds, with query parameters", ((string)(null)), table3, "When ");
-#line 16
+                    "a maximum of \'30000\' millseconds, with query parameters", ((string)(null)), table5, "When ");
+#line 38
  testRunner.Then("the average response time is less than \'500\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 18
+#line 40
  testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -140,24 +187,24 @@ this.ScenarioInitialize(scenarioInfo);
         public virtual void HammerURLWithRequestHeaders()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Hammer URL with request headers", null, ((string[])(null)));
-#line 21
+#line 43
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line hidden
-            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
                         "Key",
                         "Value"});
-            table4.AddRow(new string[] {
+            table6.AddRow(new string[] {
                         "Authorization",
                         "Bearer blahblahblah"});
-#line 22
- testRunner.Given("the request headers", ((string)(null)), table4, "Given ");
-#line 26
+#line 44
+ testRunner.Given("the request headers", ((string)(null)), table6, "Given ");
+#line 48
  testRunner.When("I hammer \'https://{Enter your URL here}\' with up to \'20\' concurrent requests for " +
                     "a maximum of \'30000\' millseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 28
+#line 50
  testRunner.Then("the average response time is less than \'1000\' milliseconds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 30
+#line 52
  testRunner.And("there are fewer than \'5\' failed responses", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
