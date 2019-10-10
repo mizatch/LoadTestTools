@@ -37,16 +37,16 @@ namespace LoadTestTools.Core
 
         public DrillStats DrillUrl(DrillOptions drillOptions)
         {
-            return ExecuteConnections(drillOptions);
-        }
-
-        private static DrillStats ExecuteConnections(DrillOptions drillOptions)
-        {
             if (drillOptions.Body != null && drillOptions.BodyType == null)
             {
                 throw new ArgumentException("You supplied a Body object, so you must supply a BodyType");
             }
 
+            return ExecuteConnections(drillOptions);
+        }
+
+        private static DrillStats ExecuteConnections(DrillOptions drillOptions)
+        {
             ThreadPool.SetMinThreads(drillOptions.ConnectionCount, 
                 drillOptions.ConnectionCount);
 
