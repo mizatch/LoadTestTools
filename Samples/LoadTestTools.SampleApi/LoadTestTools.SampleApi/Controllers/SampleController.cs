@@ -18,5 +18,18 @@ namespace LoadTestTools.SampleApi.Controllers
                 WaitMilliseconds = waitMilliseconds
             };
         }
+
+        [HttpPost("", Name = "Post")]
+        public async Task<SampleResponse> Post(SamplePayload samplePayload)
+        {
+            await Task.Delay(samplePayload.WaitMilliseconds);
+
+            return new SampleResponse
+            {
+                WaitMilliseconds = samplePayload.WaitMilliseconds
+            };
+        }
     }
+
+
 }
