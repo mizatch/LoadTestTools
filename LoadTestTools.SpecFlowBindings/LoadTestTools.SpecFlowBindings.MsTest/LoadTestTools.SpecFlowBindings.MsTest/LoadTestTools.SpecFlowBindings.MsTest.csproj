@@ -16,10 +16,9 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/mizatch/LoadTestTools</PackageProjectUrl>
     <RepositoryUrl>https://github.com/mizatch/LoadTestTools</RepositoryUrl>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <PackageTags>Load Test API SpecFlow Bindings</PackageTags>
-    <PackageReleaseNotes>- Upgraded LoadTestTools.Core to 3.2. 
-- Added hooks for pre-drill and pre-hammer processes.</PackageReleaseNotes>
+    <PackageReleaseNotes>- Upgraded LoadTestTools.Core.  Added steps to POST Hammer and POST drill.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
