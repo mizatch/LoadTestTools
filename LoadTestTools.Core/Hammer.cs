@@ -110,7 +110,7 @@ namespace LoadTestTools.Core
 
         private static RestRequest CreateRequest(HammerOptions hammerOptions)
         {
-            var request = new RestRequest(Method.GET);
+            var request = new RestRequest(GetMethod(hammerOptions.RequestMethod));
 
             if (hammerOptions.Body != null)
             {
@@ -161,6 +161,21 @@ namespace LoadTestTools.Core
                 IsSuccessful = restResponse.IsSuccessful,
                 RequestStartDateTime = requestStartDateTime
             };
+        }
+
+        private static Method GetMethod(RequestMethod restMethod)
+        {
+            switch (restMethod)
+            {
+                case RequestMethod.Get:
+                    return Method.GET;
+                case RequestMethod.Post:
+                    return Method.POST;
+                case RequestMethod.Put:
+                    return Method.PUT;
+                default:
+                    return Method.GET;
+            }
         }
     }
 }

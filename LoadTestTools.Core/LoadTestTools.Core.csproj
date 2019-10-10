@@ -12,8 +12,9 @@
     <PackageLicenseUrl></PackageLicenseUrl>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <Version>3.2.0</Version>
-    <PackageReleaseNotes>-Added hooks to allow for pre-Hammer processes and pre-Drill processes.</PackageReleaseNotes>
+    <Version>3.3.1</Version>
+    <PackageReleaseNotes>-Added option to make POST and PUT requests along with a Body and Body Type (json or xml).
+-Fixed bug where Hammer was not respecting Request Method.</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
