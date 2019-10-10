@@ -13,6 +13,11 @@ namespace LoadTestTools.Core
     {
         public HammerStats HammerUrl(HammerOptions hammerOptions)
         {
+            if (hammerOptions.Body != null && hammerOptions.BodyType == null)
+            {
+                throw new ArgumentException("You supplied a Body object, so you must supply a BodyType");
+            }
+
             return ExecuteConnections(hammerOptions);
         }
 
@@ -106,6 +111,18 @@ namespace LoadTestTools.Core
         private static RestRequest CreateRequest(HammerOptions hammerOptions)
         {
             var request = new RestRequest(Method.GET);
+
+            if (hammerOptions.Body != null)
+            {
+                if (hammerOptions.BodyType == BodyType.Json)
+                {
+                    request.AddJsonBody(hammerOptions.Body);
+                }
+                else
+                {
+                    request.AddXmlBody(hammerOptions.Body);
+                }
+            }
 
             if (hammerOptions.QueryStringParameters != null && hammerOptions.QueryStringParameters.Any())
             {

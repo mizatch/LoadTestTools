@@ -42,6 +42,11 @@ namespace LoadTestTools.Core
 
         private static DrillStats ExecuteConnections(DrillOptions drillOptions)
         {
+            if (drillOptions.Body != null && drillOptions.BodyType == null)
+            {
+                throw new ArgumentException("You supplied a Body object, so you must supply a BodyType");
+            }
+
             ThreadPool.SetMinThreads(drillOptions.ConnectionCount, 
                 drillOptions.ConnectionCount);
 
@@ -116,7 +121,19 @@ namespace LoadTestTools.Core
 
         private static RestRequest CreateRequest(DrillOptions drillOptions)
         {
-            var request = new RestRequest(Method.GET);
+            var request = new RestRequest(GetMethod(drillOptions.RequestMethod));
+
+            if (drillOptions.Body != null)
+            {
+                if (drillOptions.BodyType == BodyType.Json)
+                {
+                    request.AddJsonBody(drillOptions.Body);
+                }
+                else
+                {
+                    request.AddXmlBody(drillOptions.Body);
+                }
+            }
 
             if (drillOptions.QueryStringParameters != null && drillOptions.QueryStringParameters.Any())
             {
@@ -135,6 +152,21 @@ namespace LoadTestTools.Core
             }
 
             return request;
+        }
+
+        private static Method GetMethod(RequestMethod restMethod)
+        {
+            switch (restMethod)
+            {
+                case RequestMethod.Get:
+                    return Method.GET;
+                case RequestMethod.Post:
+                    return Method.POST;
+                case RequestMethod.Put:
+                    return Method.PUT;
+                default:
+                    return Method.GET;
+            }
         }
 
         private static void ExecutePreDrillProcesses(DrillOptions drillOptions, RestRequest request)
